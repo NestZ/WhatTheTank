@@ -6,12 +6,11 @@ import com.badlogic.gdx.graphics.Texture;
 import org.mini2Dx.core.engine.geom.CollisionBox;
 import org.mini2Dx.core.graphics.Sprite;
 
-public class Tank{
+public class Tank extends Entity{
       private Key key;
       private final int TEAM;
       private final int MAX_HP;
       private final String COLOR;
-      private Point pos;
       private boolean isDead;
       private boolean visible;
       private int hp;
@@ -25,18 +24,13 @@ public class Tank{
             this.hp = MAX_HP;
             this.isDead = false;
             this.visible = true;
-            this.pos = new Point(x,y);
             this.key = new Key();
-            this.collisionBox = new CollisionBox(0f, 0f, 2f, 2f);
-            this.sprite = new Sprite(new Texture(Gdx.files.internal("mini2Dx.png")));
+            this.sprite = new Sprite(new Texture(Gdx.files.internal("tank.png")));
+            this.collisionBox = new CollisionBox(x, y, this.sprite.getWidth(), this.sprite.getHeight());
       }
 
       public void update(){
-            if(this.visible){
-                  this.updateMove();
-                  this.collisionBox.preUpdate();
-                  this.collisionBox.set(this.pos.getX(), this.pos.getY());
-            }
+            if(this.visible)this.updateMove();
       }
 
       public void interpolate(float alpha){
@@ -44,7 +38,7 @@ public class Tank{
       }
 
       public void render(Graphics g){
-            if(this.visible)g.drawSprite(this.sprite, this.pos.getX(), this.pos.getY());
+            if(this.visible)g.drawSprite(this.sprite, this.collisionBox.getX(), this.collisionBox.getY());
       }
 
       public void setMove(int move){
@@ -69,23 +63,23 @@ public class Tank{
       }
 
       public void updateMove(){
-            if(this.key.upKey)this.setPos(this.getX(), this.getY() - 1);
-            if(this.key.downKey)this.setPos(this.getX(), this.getY() + 1);
-            if(this.key.leftKey)this.setPos(this.getX() - 1, this.getY());
-            if(this.key.rightKey)this.setPos(this.getX() + 1, this.getY());
+            System.out.println(this.collisionBox.toString());
+            if(this.key.upKey)this.collisionBox.set(this.collisionBox.getX(), this.collisionBox.getY() - 2);
+            if(this.key.downKey)this.collisionBox.set(this.collisionBox.getX(), this.collisionBox.getY() + 2);
+            if(this.key.leftKey)this.collisionBox.set(this.collisionBox.getX() - 2, this.collisionBox.getY());
+            if(this.key.rightKey)this.collisionBox.set(this.collisionBox.getX() + 2, this.collisionBox.getY());
       }
 
       public void setPos(float x, float y){
-            this.pos.setX(x);
-            this.pos.setY(y);
+            this.collisionBox.set(x,y);
       }
 
       public float getX(){
-            return this.pos.getX();
+            return this.collisionBox.getX();
       }
 
       public float getY(){
-            return this.pos.getY();
+            return this.collisionBox.getY();
       }
 
       public int team(){
