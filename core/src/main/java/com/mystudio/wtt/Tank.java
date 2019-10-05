@@ -16,6 +16,11 @@ public class Tank extends Entity{
       private int hp;
       private CollisionBox collisionBox;
       private Sprite sprite;
+      private int direction;
+      private boolean isRValid;
+      private boolean isLValid;
+      private boolean isUValid;
+      private boolean isDValid;
 
       public Tank(String color, float x, float y, int team){
             this.TEAM = team;
@@ -29,8 +34,11 @@ public class Tank extends Entity{
             this.collisionBox = new CollisionBox(x, y, this.sprite.getWidth(), this.sprite.getHeight());
       }
 
-      public void update(){
-            if(this.visible)this.updateMove();
+      public void update(float delta){
+            if(this.visible){
+                  this.collisionBox.preUpdate();
+                  this.updateMove();
+            }
       }
 
       public void interpolate(float alpha){
@@ -38,7 +46,7 @@ public class Tank extends Entity{
       }
 
       public void render(Graphics g){
-            if(this.visible)g.drawSprite(this.sprite, this.collisionBox.getX(), this.collisionBox.getY());
+            if(this.visible)g.drawSprite(this.sprite, this.collisionBox.getRenderX(), this.collisionBox.getRenderY());
       }
 
       public void setMove(int move){
@@ -63,11 +71,27 @@ public class Tank extends Entity{
       }
 
       public void updateMove(){
-            System.out.println(this.collisionBox.toString());
-            if(this.key.upKey)this.collisionBox.set(this.collisionBox.getX(), this.collisionBox.getY() - 2);
-            if(this.key.downKey)this.collisionBox.set(this.collisionBox.getX(), this.collisionBox.getY() + 2);
-            if(this.key.leftKey)this.collisionBox.set(this.collisionBox.getX() - 2, this.collisionBox.getY());
-            if(this.key.rightKey)this.collisionBox.set(this.collisionBox.getX() + 2, this.collisionBox.getY());
+            if(this.key.upKey && isUValid)this.collisionBox.set(this.collisionBox.getX(), this.collisionBox.getY() - 2);
+            if(this.key.downKey && isDValid)this.collisionBox.set(this.collisionBox.getX(), this.collisionBox.getY() + 2);
+            if(this.key.leftKey && isLValid)this.collisionBox.set(this.collisionBox.getX() - 2, this.collisionBox.getY());
+            if(this.key.rightKey && isRValid)this.collisionBox.set(this.collisionBox.getX() + 2, this.collisionBox.getY());
+      }
+
+      public void setValidMove(char c,boolean b){
+            switch (c){
+                  case 'R' :
+                        this.isRValid = b;break;
+                  case 'L' :
+                        this.isLValid = b;break;
+                  case 'U' :
+                        this.isUValid = b;break;
+                  case 'D' :
+                        this.isDValid = b;break;
+            }
+      }
+
+      public CollisionBox CollisionBox(){
+            return this.collisionBox;
       }
 
       public void setPos(float x, float y){
@@ -75,11 +99,19 @@ public class Tank extends Entity{
       }
 
       public float getX(){
-            return this.collisionBox.getX();
+            return this.collisionBox.getRenderX();
       }
 
       public float getY(){
-            return this.collisionBox.getY();
+            return this.collisionBox.getRenderY();
+      }
+
+      public float getWidth(){
+            return this.sprite.getWidth();
+      }
+
+      public float getHeight(){
+            return this.sprite.getHeight();
       }
 
       public int team(){

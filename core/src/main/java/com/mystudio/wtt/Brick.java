@@ -12,10 +12,14 @@ public class Brick extends Wall{
 
       public Brick(){
             this.sprite = new Sprite(new Texture(Gdx.files.internal("wall.png")));
-            this.collisionBox = new CollisionBox(250f, 250f, this.sprite.getX(), this.sprite.getY());
+            this.collisionBox = new CollisionBox(250f, 250f, this.sprite.getWidth(), this.sprite.getHeight());
       }
 
-      public void update(){
+      public CollisionBox collisionBox(){
+            return this.collisionBox;
+      }
+
+      public void update(float delta){
             this.collisionBox.preUpdate();
             this.collisionBox.set(250f, 250f);
       }
