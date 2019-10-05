@@ -6,17 +6,21 @@ import com.badlogic.gdx.graphics.Texture;
 import org.mini2Dx.core.engine.geom.CollisionBox;
 import org.mini2Dx.core.graphics.Sprite;
 
-public class Tank{
+public class Tank extends Entity{
       private Key key;
       private final int TEAM;
       private final int MAX_HP;
       private final String COLOR;
-      private Point pos;
       private boolean isDead;
       private boolean visible;
       private int hp;
       private CollisionBox collisionBox;
       private Sprite sprite;
+      private int direction;
+      private boolean isRValid;
+      private boolean isLValid;
+      private boolean isUValid;
+      private boolean isDValid;
 
       public Tank(String color, float x, float y, int team){
             this.TEAM = team;
@@ -25,17 +29,15 @@ public class Tank{
             this.hp = MAX_HP;
             this.isDead = false;
             this.visible = true;
-            this.pos = new Point(x,y);
             this.key = new Key();
-            this.collisionBox = new CollisionBox(0f, 0f, 2f, 2f);
-            this.sprite = new Sprite(new Texture(Gdx.files.internal("mini2Dx.png")));
+            this.sprite = new Sprite(new Texture(Gdx.files.internal("tank.png")));
+            this.collisionBox = new CollisionBox(x, y, this.sprite.getWidth(), this.sprite.getHeight());
       }
 
-      public void update(){
+      public void update(float delta){
             if(this.visible){
-                  this.updateMove();
                   this.collisionBox.preUpdate();
-                  this.collisionBox.set(this.pos.getX(), this.pos.getY());
+                  this.updateMove();
             }
       }
 
@@ -44,7 +46,7 @@ public class Tank{
       }
 
       public void render(Graphics g){
-            if(this.visible)g.drawSprite(this.sprite, this.pos.getX(), this.pos.getY());
+            if(this.visible)g.drawSprite(this.sprite, this.collisionBox.getRenderX(), this.collisionBox.getRenderY());
       }
 
       public void setMove(int move){
@@ -69,23 +71,47 @@ public class Tank{
       }
 
       public void updateMove(){
-            if(this.key.upKey)this.setPos(this.getX(), this.getY() - 1);
-            if(this.key.downKey)this.setPos(this.getX(), this.getY() + 1);
-            if(this.key.leftKey)this.setPos(this.getX() - 1, this.getY());
-            if(this.key.rightKey)this.setPos(this.getX() + 1, this.getY());
+            if(this.key.upKey && isUValid)this.collisionBox.set(this.collisionBox.getX(), this.collisionBox.getY() - 2);
+            if(this.key.downKey && isDValid)this.collisionBox.set(this.collisionBox.getX(), this.collisionBox.getY() + 2);
+            if(this.key.leftKey && isLValid)this.collisionBox.set(this.collisionBox.getX() - 2, this.collisionBox.getY());
+            if(this.key.rightKey && isRValid)this.collisionBox.set(this.collisionBox.getX() + 2, this.collisionBox.getY());
+      }
+
+      public void setValidMove(char c,boolean b){
+            switch (c){
+                  case 'R' :
+                        this.isRValid = b;break;
+                  case 'L' :
+                        this.isLValid = b;break;
+                  case 'U' :
+                        this.isUValid = b;break;
+                  case 'D' :
+                        this.isDValid = b;break;
+            }
+      }
+
+      public CollisionBox CollisionBox(){
+            return this.collisionBox;
       }
 
       public void setPos(float x, float y){
-            this.pos.setX(x);
-            this.pos.setY(y);
+            this.collisionBox.set(x,y);
       }
 
       public float getX(){
-            return this.pos.getX();
+            return this.collisionBox.getRenderX();
       }
 
       public float getY(){
-            return this.pos.getY();
+            return this.collisionBox.getRenderY();
+      }
+
+      public float getWidth(){
+            return this.sprite.getWidth();
+      }
+
+      public float getHeight(){
+            return this.sprite.getHeight();
       }
 
       public int team(){
