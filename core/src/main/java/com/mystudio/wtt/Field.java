@@ -24,6 +24,12 @@ public class Field{
       }
 
       public void update(float delta){
+            this.checkTankCollision();
+            this.tank.update(delta);
+            this.wall.update(delta);
+      }
+
+      public void checkTankCollision(){
             switch(this.collisionHandler.isCollide()){
                   case 'R' :
                         this.tank.setValidMove('R', false);break;
@@ -39,8 +45,6 @@ public class Field{
                         this.tank.setValidMove('U', true);
                         this.tank.setValidMove('D', true);
             }
-            this.tank.update(delta);
-            this.wall.update(delta);
       }
 
       public void interpolate(float alpha){
