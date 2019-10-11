@@ -8,14 +8,18 @@ public class Field{
       private Wall wall;
       private InputHandler inputHandler;
       private CollisionHandler collisionHandler;
+      private ServerStarter server;
+      private ClientStarter client;
 
       public Field(){
-            this.tank = new Tank("c", 0f, 0f, 1);
+            this.tank = new Tank("c", 0f, 0f, 1, -1);
             this.wall = new Brick();
             this.inputHandler = new InputHandler(tank);
             Gdx.input.setInputProcessor(inputHandler);
             this.collisionHandler = new CollisionHandler();
             this.setCollision();
+            this.server = new ServerStarter();
+            this.client = new ClientStarter("127.0.0.1", 11111, 0, 0, 0);
       }
 
       public void setCollision(){

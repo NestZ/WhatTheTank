@@ -21,12 +21,14 @@ public class Tank extends Entity{
       private boolean isLValid;
       private boolean isUValid;
       private boolean isDValid;
+      private int id;
 
-      public Tank(String color, float x, float y, int team){
+      public Tank(String color, float x, float y, int team, int id){
             this.TEAM = team;
             this.MAX_HP = 3;
             this.COLOR = color;
             this.hp = MAX_HP;
+            this.id = id;
             this.isDead = false;
             this.visible = true;
             this.key = new Key();
