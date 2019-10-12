@@ -53,7 +53,7 @@ public class ServerThread extends Thread {
                         e.printStackTrace();
                   }
                   System.out.println(command);
-                  if(command.startsWith("exit"))this.isRunning = false;
+                  if(command.startsWith("exit"))this.isRunning = true;
                   else if(command.startsWith("hello")){
                         float x = Float.parseFloat(command.substring(5,command.indexOf(",")));
                         float y = Float.parseFloat(command.substring(command.indexOf(",") + 1,command.indexOf(":")));
@@ -62,6 +62,8 @@ public class ServerThread extends Thread {
                   }
             }
             try{
+                  this.writer.close();
+                  this.reader.close();
                   clientSocket.close();
                   this.serverSocket.close();
             }

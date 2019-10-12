@@ -22,16 +22,20 @@ public class Tank extends Entity{
       private boolean isUValid;
       private boolean isDValid;
       private int id;
+      private ClientRegister client;
+      private float moveSpeed;
 
       public Tank(String color, float x, float y, int team, int id){
             this.TEAM = team;
             this.MAX_HP = 3;
             this.COLOR = color;
+            this.moveSpeed = 2;
             this.hp = MAX_HP;
             this.id = id;
             this.isDead = false;
             this.visible = true;
             this.key = new Key();
+            this.client = ClientRegister.getInstance();
             this.sprite = new Sprite(new Texture(Gdx.files.internal("tank.png")));
             this.collisionBox = new CollisionBox(x, y, this.sprite.getWidth(), this.sprite.getHeight());
       }
@@ -72,11 +76,23 @@ public class Tank extends Entity{
             }
       }
 
-      public void updateMove(){
-            if(this.key.upKey && isUValid)this.collisionBox.set(this.collisionBox.getX(), this.collisionBox.getY() - 2);
-            if(this.key.downKey && isDValid)this.collisionBox.set(this.collisionBox.getX(), this.collisionBox.getY() + 2);
-            if(this.key.leftKey && isLValid)this.collisionBox.set(this.collisionBox.getX() - 2, this.collisionBox.getY());
-            if(this.key.rightKey && isRValid)this.collisionBox.set(this.collisionBox.getX() + 2, this.collisionBox.getY());
+      private void updateMove(){
+            if(this.key.upKey && this.isUValid){
+                  this.moveUp();
+                  this.client.sendToServer("Update u");
+            }
+            if(this.key.downKey && this.isDValid){
+                  this.moveDown();
+                  this.client.sendToServer("Update d");
+            }
+            if(this.key.leftKey && this.isLValid){
+                  this.moveLeft();
+                  this.client.sendToServer("Update l");
+            }
+            if(this.key.rightKey && this.isRValid){
+                  this.moveRight();
+                  this.client.sendToServer("Update r");
+            }
       }
 
       public void setValidMove(char c,boolean b){
@@ -94,6 +110,22 @@ public class Tank extends Entity{
 
       public CollisionBox CollisionBox(){
             return this.collisionBox;
+      }
+
+      private void moveLeft(){
+            this.collisionBox.set(this.collisionBox.getX() - this.moveSpeed, this.collisionBox.getY());
+      }
+
+      private void moveRight(){
+            this.collisionBox.set(this.collisionBox.getX() + this.moveSpeed, this.collisionBox.getY());
+      }
+
+      private void moveUp(){
+            this.collisionBox.set(this.collisionBox.getX(), this.collisionBox.getY() - this.moveSpeed);
+      }
+
+      private void moveDown(){
+            this.collisionBox.set(this.collisionBox.getX(), this.collisionBox.getY() + this.moveSpeed);
       }
 
       public void setPos(float x, float y){

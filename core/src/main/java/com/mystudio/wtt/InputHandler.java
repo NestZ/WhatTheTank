@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input.Keys;
 
 public class InputHandler implements InputProcessor{
       private Tank tank;
+      
       public InputHandler(Tank tank){
             this.tank = tank;
       }

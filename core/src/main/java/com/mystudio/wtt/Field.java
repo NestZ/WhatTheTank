@@ -14,8 +14,8 @@ public class Field{
       public Field(){
             this.tank = new Tank("c", 0f, 0f, 1, -1);
             this.wall = new Brick();
-            this.inputHandler = new InputHandler(tank);
-            Gdx.input.setInputProcessor(inputHandler);
+            this.inputHandler = new InputHandler(this.tank);
+            Gdx.input.setInputProcessor(this.inputHandler);
             this.collisionHandler = new CollisionHandler();
             this.setCollision();
             this.server = new ServerStarter();

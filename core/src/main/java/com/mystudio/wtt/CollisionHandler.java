@@ -12,10 +12,10 @@ public class CollisionHandler{
 
       public void setTank(Tank tank){
             this.tank = tank;
-            tankR = new CollisionBox();
-            tankL = new CollisionBox();
-            tankU = new CollisionBox();
-            tankD = new CollisionBox();
+            this.tankR = new CollisionBox();
+            this.tankL = new CollisionBox();
+            this.tankU = new CollisionBox();
+            this.tankD = new CollisionBox();
       }
 
       public void setWall(Wall wall){
@@ -24,14 +24,14 @@ public class CollisionHandler{
 
       public char isCollide(){
             this.setTankCollisionBox();
-            if(tankR.intersects(this.wall.collisionBox()))return 'R';
-            else if(tankL.intersects(this.wall.collisionBox()))return 'L';
-            else if(tankU.intersects(this.wall.collisionBox()))return 'U';
-            else if(tankD.intersects(this.wall.collisionBox()))return 'D';
+            if(this.tankR.intersects(this.wall.collisionBox()))return 'R';
+            else if(this.tankL.intersects(this.wall.collisionBox()))return 'L';
+            else if(this.tankU.intersects(this.wall.collisionBox()))return 'U';
+            else if(this.tankD.intersects(this.wall.collisionBox()))return 'D';
             return '\0';
       }
 
-      public void setTankCollisionBox(){
+      private void setTankCollisionBox(){
             this.tankR.set(this.tank.getX() + this.tank.getWidth(), this.tank.getY() + 3, 1f, this.tank.getHeight() - 6);
             this.tankL.set(this.tank.getX() - 1,this.tank.getY() + 3, 1f,this.tank.getHeight() - 6);
             this.tankU.set(this.tank.getX() + 3, this.tank.getY() - 1, this.tank.getWidth() - 6, 1f);

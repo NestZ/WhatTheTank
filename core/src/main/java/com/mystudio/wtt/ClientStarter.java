@@ -21,7 +21,7 @@ public class ClientStarter{
                   this.clientRegister = ClientRegister.getInstance();
                   this.clientRegister.register(hostName, serverPort, x, y, dir);
                   try{
-                        Thread.sleep(300);
+                        Thread.sleep(500);
                   }
                   catch(InterruptedException e){
                         e.printStackTrace();
