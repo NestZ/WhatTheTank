@@ -22,20 +22,20 @@ public class Tank extends Entity{
       private boolean isUValid;
       private boolean isDValid;
       private int id;
-      private ClientRegister client;
       private float moveSpeed;
+      private ClientStarter client;
 
-      public Tank(String color, float x, float y, int team, int id){
+      public Tank(String color, float x, float y, int team, int id, ClientStarter client){
             this.TEAM = team;
             this.MAX_HP = 3;
             this.COLOR = color;
+            this.client = client;
             this.moveSpeed = 2;
             this.hp = MAX_HP;
             this.id = id;
             this.isDead = false;
             this.visible = true;
             this.key = new Key();
-            this.client = ClientRegister.getInstance();
             this.sprite = new Sprite(new Texture(Gdx.files.internal("tank.png")));
             this.collisionBox = new CollisionBox(x, y, this.sprite.getWidth(), this.sprite.getHeight());
       }
@@ -79,19 +79,19 @@ public class Tank extends Entity{
       private void updateMove(){
             if(this.key.upKey && this.isUValid){
                   this.moveUp();
-                  this.client.sendToServer("Updateu");
+                  this.client.sendToServer("Update u");
             }
             if(this.key.downKey && this.isDValid){
                   this.moveDown();
-                  this.client.sendToServer("Updated");
+                  this.client.sendToServer("Update d");
             }
             if(this.key.leftKey && this.isLValid){
                   this.moveLeft();
-                  this.client.sendToServer("Updatel");
+                  this.client.sendToServer("Update l");
             }
             if(this.key.rightKey && this.isRValid){
                   this.moveRight();
-                  this.client.sendToServer("Updater");
+                  this.client.sendToServer("Update r");
             }
       }
 

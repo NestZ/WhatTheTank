@@ -1,8 +1,10 @@
 package com.mystudio.wtt;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -13,8 +15,6 @@ public class ServerThread extends Thread {
       private boolean isRunning = true;
       private ServerSocket serverSocket;
       private int serverPort = 1234;
-      private DataInputStream reader;
-      private DataOutputStream writer;
 
       public ServerThread() throws SocketException{
             this.clients = new ArrayList<>();
@@ -24,89 +24,113 @@ public class ServerThread extends Thread {
             catch(IOException e){
                   e.printStackTrace();
             }
-            System.out.println("Server Created");
+            System.out.println("Server : Server Created");
       }
 
+      @Override
       public void run(){
             Socket clientSocket = null;
             while(this.isRunning){
-                  System.out.println("Server Started");
                   try{
                         clientSocket = serverSocket.accept();
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                        ServerSubThread subThread = new ServerSubThread(clientSocket, reader, writer);
+                        subThread.start();
+                        System.out.println("Server : Sub - Thread Started");
                   }
                   catch(IOException e){
                         e.printStackTrace();
                   }
-                  String command = "";
-                  try{
-                        this.reader = new DataInputStream(clientSocket.getInputStream());
-                        this.writer = new DataOutputStream(clientSocket.getOutputStream());
-                  }
-                  catch(IOException e){
-                        e.printStackTrace();
-                  }
-                  try{
-                        this.writer.writeUTF("Hello from server isus");
-                        command = this.reader.readUTF();
-                  }
-                  catch(IOException e){
-                        e.printStackTrace();
-                  }
-                  System.out.println(command);
-                  if(command.startsWith("exit"))this.isRunning = true;
-                  else if(command.startsWith("hello")){
-                        float x = Float.parseFloat(command.substring(5,command.indexOf(",")));
-                        float y = Float.parseFloat(command.substring(command.indexOf(",") + 1,command.indexOf(":")));
-                        int dir = Integer.parseInt(command.substring(command.indexOf(":") + 1,command.length()));
-                        clients.add(new ClientInfo(this.writer, x, y, dir));
-                  }
-                  else if(command.startsWith("Update"))System.out.println("kuy");
             }
             try{
-                  this.writer.close();
-                  this.reader.close();
-                  clientSocket.close();
                   this.serverSocket.close();
+                  clientSocket.close();
             }
             catch(IOException e){
                   e.printStackTrace();
             }
       }
 
-      private class ClientInfo{
+      class ServerSubThread extends Thread{
+            private BufferedReader reader;
+            private BufferedWriter writer;
+            private Socket socket;
+            private boolean isRunning = true;
+
+            public ServerSubThread(Socket socket, BufferedReader reader, BufferedWriter writer){
+                  this.reader = reader;
+                  this.writer = writer;
+                  this.socket = socket;
+            }
+
+            @Override
+            public void run(){
+                  String command;
+                  while(this.isRunning){
+                        try{
+                              System.out.println("Sub - Thread : Waiting for command");
+                              command = this.reader.readLine();
+                              System.out.println(command);
+                              if(command.startsWith("hello")){
+                                    float x = Float.parseFloat(command.substring(5,command.indexOf(",")));
+                                    float y = Float.parseFloat(command.substring(command.indexOf(",") + 1,command.indexOf(":")));
+                                    int dir = Integer.parseInt(command.substring(command.indexOf(":") + 1,command.length()));
+                                    clients.add(new ClientInfo(this.writer, x, y, dir));
+                                    System.out.println("Server : rec hello");
+                              }
+                              else if(command.startsWith("Update"))System.out.println("kuy");
+                        }
+                        catch(IOException e){
+                              e.printStackTrace();
+                        }
+                  }
+                  try{
+                        this.writer.close();
+                        this.reader.close();
+                        socket.close();
+                  }
+                  catch(IOException e){
+                        e.printStackTrace();
+                  }
+            }
+      }
+      
+
+      class ClientInfo{
             private float x;
             private float y;
             private int dir;
-            private DataOutputStream writer;
+            private BufferedWriter writer;
 
-            private ClientInfo(DataOutputStream writer, float x, float y, int dir){
+            public ClientInfo(BufferedWriter writer, float x, float y, int dir){
                   this.x = x;
                   this.y = y;
                   this.dir = dir;
                   this.writer = writer;
             }
 
-            private float getX(){
+            public float getX(){
                   return this.x;
             }
 
-            private float getY(){
+            public float getY(){
                   return this.y;
             }
 
-            private void setX(float x){
+            public void setX(float x){
                   this.x = x;
             }
 
-            private void setY(float y){
+            public void setY(float y){
                   this.y = y;
             }
 
-            private void setDir(int dir){
+            public void setDir(int dir){
                   this.dir = dir;
             }
 
-            private int getDir(){
+            public int getDir(){
                   return this.dir;
             }
       }

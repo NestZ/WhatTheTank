@@ -12,14 +12,14 @@ public class Field{
       private ClientStarter client;
 
       public Field(){
-            this.tank = new Tank("c", 0f, 0f, 1, -1);
             this.wall = new Brick();
-            this.inputHandler = new InputHandler(this.tank);
-            Gdx.input.setInputProcessor(this.inputHandler);
             this.collisionHandler = new CollisionHandler();
-            this.setCollision();
             this.server = new ServerStarter();
             this.client = new ClientStarter("127.0.0.1", 1234, 0, 0, 0);
+            this.tank = new Tank("c", 0f, 0f, 1, -1, this.client);
+            this.setCollision();
+            this.inputHandler = new InputHandler(this.tank);
+            Gdx.input.setInputProcessor(this.inputHandler);
       }
 
       public void setCollision(){

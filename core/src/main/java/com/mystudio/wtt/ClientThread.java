@@ -1,21 +1,18 @@
 package com.mystudio.wtt;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.SocketException;
 
 public class ClientThread extends Thread {
       private boolean isRunning = true;
-      private Socket clientSocket;
-      private DataInputStream reader;
-      private DataOutputStream writer;
+      private BufferedReader reader;
       
       public ClientThread(Socket clientSocket) throws SocketException{
-            this.clientSocket = clientSocket;
             try{
-                  this.reader = new DataInputStream(clientSocket.getInputStream());
+                  this.reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             }
             catch(IOException e){
                   e.printStackTrace();
@@ -28,7 +25,7 @@ public class ClientThread extends Thread {
             while(this.isRunning){
                   String command = "";
                   try{
-                        command = reader.readUTF();
+                        command = reader.readLine();
                   }
                   catch(IOException e){
                         e.printStackTrace();

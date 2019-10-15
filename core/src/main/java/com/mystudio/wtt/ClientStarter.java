@@ -1,37 +1,43 @@
 package com.mystudio.wtt;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 
 public class ClientStarter{
       private ClientThread client;
       private Socket clientSocket;
-      // public String hostName = "127.0.0.1";
-      // public int serverPort = 11111;
-      private ClientRegister clientRegister;
+      private BufferedWriter writer;
 
       public ClientStarter(String hostName, int serverPort, int x, int y, int dir){
             try{
+                  this.clientSocket = new Socket(hostName, serverPort);
+                  this.writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
                   try{
                         Thread.sleep(100);
-                  }
-                  catch(InterruptedException e){
-                        e.printStackTrace();
-                  }
-                  this.clientRegister = ClientRegister.getInstance();
-                  this.clientRegister.register(hostName, serverPort, x, y, dir);
-                  try{
+                        this.writer.write("hello" + x + "," + y + ":" + dir + "\n");
+                        this.writer.flush();
                         Thread.sleep(500);
                   }
                   catch(InterruptedException e){
                         e.printStackTrace();
                   }
-                  this.clientSocket = new Socket(hostName, serverPort);
                   this.client = new ClientThread(this.clientSocket);
                   this.client.start();
             }
             catch(IOException e){
                   e.printStackTrace();
+            }
+      }
+
+      public void sendToServer(String command){
+            try{
+                  this.writer.write(command + "\n");
+                  this.writer.flush();
+            }
+            catch(IOException e){
+                  System.out.println("can not send to server");
             }
       }
 }
