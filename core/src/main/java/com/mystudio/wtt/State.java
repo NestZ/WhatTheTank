@@ -3,13 +3,14 @@ package com.mystudio.wtt;
 import java.util.Stack;
 
 public class State{
-      public enum state{
+      public states currState;
+      public enum states{
             MENU,
             OPTION
       }
-      private Stack<state> stack;
+      private Stack<states> stack;
 
-      public void push(state s){
+      public void push(states s){
             stack.push(s);
       }
 
@@ -17,7 +18,7 @@ public class State{
             stack.pop();
       }
 
-      public state top(){
+      public states top(){
             return stack.lastElement();
       }
 }

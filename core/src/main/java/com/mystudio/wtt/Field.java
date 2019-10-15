@@ -8,14 +8,18 @@ public class Field{
       private Wall wall;
       private InputHandler inputHandler;
       private CollisionHandler collisionHandler;
+      private ServerStarter server;
+      private ClientStarter client;
 
       public Field(){
-            this.tank = new Tank("c", 0f, 0f, 1);
             this.wall = new Brick();
-            this.inputHandler = new InputHandler(tank);
-            Gdx.input.setInputProcessor(inputHandler);
             this.collisionHandler = new CollisionHandler();
+            this.server = new ServerStarter();
+            this.client = new ClientStarter("127.0.0.1", 1234, 0, 0, 0);
+            this.tank = new Tank("c", 0f, 0f, 1, -1, this.client);
             this.setCollision();
+            this.inputHandler = new InputHandler(this.tank);
+            Gdx.input.setInputProcessor(this.inputHandler);
       }
 
       public void setCollision(){
@@ -24,6 +28,12 @@ public class Field{
       }
 
       public void update(float delta){
+            this.checkTankCollision();
+            this.tank.update(delta);
+            this.wall.update(delta);
+      }
+
+      public void checkTankCollision(){
             switch(this.collisionHandler.isCollide()){
                   case 'R' :
                         this.tank.setValidMove('R', false);break;
@@ -39,8 +49,6 @@ public class Field{
                         this.tank.setValidMove('U', true);
                         this.tank.setValidMove('D', true);
             }
-            this.tank.update(delta);
-            this.wall.update(delta);
       }
 
       public void interpolate(float alpha){
