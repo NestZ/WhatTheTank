@@ -79,19 +79,19 @@ public class Tank extends Entity{
       private void updateMove(){
             if(this.key.upKey && this.isUValid){
                   this.moveUp();
-                  this.client.sendToServer("Update u");
+                  this.client.sendToServer("Updateu");
             }
             if(this.key.downKey && this.isDValid){
                   this.moveDown();
-                  this.client.sendToServer("Update d");
+                  this.client.sendToServer("Updated");
             }
             if(this.key.leftKey && this.isLValid){
                   this.moveLeft();
-                  this.client.sendToServer("Update l");
+                  this.client.sendToServer("Updatel");
             }
             if(this.key.rightKey && this.isRValid){
                   this.moveRight();
-                  this.client.sendToServer("Update r");
+                  this.client.sendToServer("Updater");
             }
       }
 

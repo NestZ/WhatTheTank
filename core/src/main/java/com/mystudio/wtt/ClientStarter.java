@@ -28,10 +28,10 @@ public class ClientStarter{
                   }
                   this.clientSocket = new Socket(hostName, serverPort);
                   this.client = new ClientThread(this.clientSocket);
+                  this.client.start();
             }
             catch(IOException e){
                   e.printStackTrace();
             }
-            this.client.start();
       }
 }

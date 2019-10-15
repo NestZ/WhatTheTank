@@ -12,7 +12,7 @@ public class ServerThread extends Thread {
       private ArrayList<ClientInfo> clients;
       private boolean isRunning = true;
       private ServerSocket serverSocket;
-      private int serverPort = 11111;
+      private int serverPort = 1234;
       private DataInputStream reader;
       private DataOutputStream writer;
 
@@ -46,7 +46,7 @@ public class ServerThread extends Thread {
                         e.printStackTrace();
                   }
                   try{
-                        this.writer.writeUTF("Hello from server");
+                        this.writer.writeUTF("Hello from server isus");
                         command = this.reader.readUTF();
                   }
                   catch(IOException e){
@@ -60,6 +60,7 @@ public class ServerThread extends Thread {
                         int dir = Integer.parseInt(command.substring(command.indexOf(":") + 1,command.length()));
                         clients.add(new ClientInfo(this.writer, x, y, dir));
                   }
+                  else if(command.startsWith("Update"))System.out.println("kuy");
             }
             try{
                   this.writer.close();

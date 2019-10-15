@@ -19,7 +19,7 @@ public class Field{
             this.collisionHandler = new CollisionHandler();
             this.setCollision();
             this.server = new ServerStarter();
-            this.client = new ClientStarter("127.0.0.1", 11111, 0, 0, 0);
+            this.client = new ClientStarter("127.0.0.1", 1234, 0, 0, 0);
       }
 
       public void setCollision(){
