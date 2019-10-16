@@ -16,9 +16,9 @@ public class Field{
             this.collisionHandler = new CollisionHandler();
             this.server = new ServerStarter();
             this.client = new ClientStarter("127.0.0.1", 1234, 0, 0, 0);
-            this.tank = new Tank("c", 0f, 0f, 1, -1, this.client);
+            this.tank = new Tank("c", 0f, 0f, 1, this.client.clientThread.getID());
+            this.inputHandler = new InputHandler(this.tank, this.client);
             this.setCollision();
-            this.inputHandler = new InputHandler(this.tank);
             Gdx.input.setInputProcessor(this.inputHandler);
       }
 
@@ -30,6 +30,10 @@ public class Field{
       public void update(float delta){
             this.checkTankCollision();
             this.tank.update(delta);
+            for(int i = 0;i < client.clientThread.getClientSize();i++){
+                  if(i != this.tank.getID())client.clientThread.getTank(i).update(delta);
+            }
+            if(this.inputHandler.keyDown)this.inputHandler.sendToServer();
             this.wall.update(delta);
       }
 
@@ -53,11 +57,17 @@ public class Field{
 
       public void interpolate(float alpha){
             this.tank.interpolate(alpha);
+            for(int i = 0;i < client.clientThread.getClientSize();i++){
+                  if(i != this.tank.getID())client.clientThread.getTank(i).interpolate(alpha);
+            }
             this.wall.interpolate(alpha);
       }
 
       public void render(Graphics g){
             this.tank.render(g);
+            for(int i = 0;i < client.clientThread.getClientSize();i++){
+                  if(i != this.tank.getID())client.clientThread.getTank(i).render(g);
+            }
             this.wall.render(g);
       }
 }

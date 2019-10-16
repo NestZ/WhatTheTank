@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
-public class ClientStarter{
-      private ClientThread client;
+public class ClientStarter {
+      public ClientThread clientThread;
       private Socket clientSocket;
       private BufferedWriter writer;
 
@@ -16,15 +16,16 @@ public class ClientStarter{
                   this.writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
                   try{
                         Thread.sleep(100);
-                        this.writer.write("hello" + x + "," + y + ":" + dir + "\n");
+                        this.writer.write("Hello" + x + "," + y + ":" + dir + "\n");
                         this.writer.flush();
                         Thread.sleep(500);
                   }
                   catch(InterruptedException e){
                         e.printStackTrace();
                   }
-                  this.client = new ClientThread(this.clientSocket);
-                  this.client.start();
+                  this.clientThread = new ClientThread(this.clientSocket);
+                  this.clientThread.start();
+                  this.clientThread.addToMap("c", x, y, dir);
             }
             catch(IOException e){
                   e.printStackTrace();

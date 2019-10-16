@@ -5,13 +5,21 @@ import com.badlogic.gdx.Input.Keys;
 
 public class InputHandler implements InputProcessor{
       private Tank tank;
+      private ClientStarter client;
+      public boolean keyDown = false;
       
-      public InputHandler(Tank tank){
+      public InputHandler(Tank tank, ClientStarter client){
             this.tank = tank;
+            this.client = client;
+      }
+
+      public void sendToServer(){
+            this.client.sendToServer("Update" + this.tank.getID() + "x" + this.tank.getX() + "y" + this.tank.getY() + ":" + this.tank.getDir());
       }
       
       @Override
       public boolean keyDown (int keycode){
+            this.keyDown = true;
             switch(keycode){
                   case Keys.UP : 
                         this.tank.setMove(1);
@@ -32,6 +40,7 @@ public class InputHandler implements InputProcessor{
 
       @Override
       public boolean keyUp (int keycode){
+            this.keyDown = false;
             switch(keycode){
                   case Keys.UP : 
                         this.tank.setMove(5);
