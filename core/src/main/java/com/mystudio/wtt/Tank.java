@@ -21,23 +21,20 @@ public class Tank extends Entity{
       private boolean isLValid;
       private boolean isUValid;
       private boolean isDValid;
-      private int id;
+      private int ID;
       private float moveSpeed;
-      private ClientStarter client;
 
-      public Tank(String color, float x, float y, int team, int id, ClientStarter client){
+      public Tank(String color, float x, float y, int team, int ID){
             this.TEAM = team;
             this.MAX_HP = 3;
             this.COLOR = color;
-            this.client = client;
             this.moveSpeed = 2;
             this.hp = MAX_HP;
-            this.id = id;
             this.isDead = false;
-            this.visible = true;
+            this.visible = false;
             this.key = new Key();
-            this.sprite = new Sprite(new Texture(Gdx.files.internal("tank.png")));
-            this.collisionBox = new CollisionBox(x, y, this.sprite.getWidth(), this.sprite.getHeight());
+            this.ID = ID;
+            this.collisionBox = new CollisionBox(x, y, 0, 0);
       }
 
       public void update(float delta){
@@ -79,19 +76,15 @@ public class Tank extends Entity{
       private void updateMove(){
             if(this.key.upKey && this.isUValid){
                   this.moveUp();
-                  this.client.sendToServer("Update u");
             }
             if(this.key.downKey && this.isDValid){
                   this.moveDown();
-                  this.client.sendToServer("Update d");
             }
             if(this.key.leftKey && this.isLValid){
                   this.moveLeft();
-                  this.client.sendToServer("Update l");
             }
             if(this.key.rightKey && this.isRValid){
                   this.moveRight();
-                  this.client.sendToServer("Update r");
             }
       }
 
@@ -128,8 +121,28 @@ public class Tank extends Entity{
             this.collisionBox.set(this.collisionBox.getX(), this.collisionBox.getY() + this.moveSpeed);
       }
 
-      public void setPos(float x, float y){
+      public void setPos(float x, float y, int dir){
             this.collisionBox.set(x,y);
+            this.direction = dir;
+      }
+
+      public void setSprite(){
+            this.sprite = new Sprite(new Texture(Gdx.files.internal("tank.png")));
+            this.collisionBox.setWidth(this.sprite.getWidth());
+            this.collisionBox.setHeight(this.sprite.getHeight());
+            this.visible = true;
+      }
+
+      public Sprite getSprite(){
+            return this.sprite;
+      }
+
+      public int getID(){
+            return this.ID;
+      }
+
+      public int getDir(){
+            return this.direction;
       }
 
       public float getX(){

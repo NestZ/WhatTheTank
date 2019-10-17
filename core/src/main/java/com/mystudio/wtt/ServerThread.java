@@ -8,16 +8,16 @@ import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ServerThread extends Thread {
-      private ArrayList<ClientInfo> clients;
+      private HashMap<Integer, ClientInfo> clients;
       private boolean isRunning = true;
       private ServerSocket serverSocket;
       private int serverPort = 1234;
 
       public ServerThread() throws SocketException{
-            this.clients = new ArrayList<>();
+            this.clients = new HashMap<>();
             try{
                   this.serverSocket = new ServerSocket(this.serverPort);
             }
@@ -52,16 +52,59 @@ public class ServerThread extends Thread {
             }
       }
 
+      public void sendUpdate(int ID, int dir, float x, float y){
+            for(int i = 0;i < clients.size();i++){
+                  BufferedWriter writer = clients.get(i).getWriter();
+                  try{
+                        writer.write("Update" + ID + "x" + x + "y" + y + ":" + dir + "\n");
+                        writer.flush();
+                  }
+                  catch(IOException e){
+                        e.printStackTrace();
+                  }
+            }
+      }
+
+      public void sendRegister(int ID, int dir, float x, float y){
+            for(int i = 0;i < clients.size();i++){
+                  BufferedWriter writer = clients.get(i).getWriter();
+                  try{
+                        writer.write("REG" + ID + "x" + x + "y" + y + ":" + dir + "\n");
+                        writer.flush();
+                  }
+                  catch(IOException e){
+                        e.printStackTrace();
+                  }
+            }
+      }
+
+      public void sendGets(BufferedWriter writer){
+            try{
+                  writer.write("GETS" + clients.size() + "\n");
+                  writer.flush();
+                  for(int i = 0;i < clients.size();i++){
+                        ClientInfo client = clients.get(i);
+                        writer.write("GET" + i + client.getID() + "x" + client.getX() + "y" + client.getY() + ":" + client.getDir() + "\n");
+                        writer.flush();
+                  }
+            }
+            catch(IOException e){
+                  e.printStackTrace();
+            }
+      }
+
       class ServerSubThread extends Thread{
             private BufferedReader reader;
             private BufferedWriter writer;
             private Socket socket;
             private boolean isRunning = true;
+            private long threadID;
 
             public ServerSubThread(Socket socket, BufferedReader reader, BufferedWriter writer){
                   this.reader = reader;
                   this.writer = writer;
                   this.socket = socket;
+                  this.threadID = Thread.currentThread().getId();
             }
 
             @Override
@@ -69,17 +112,30 @@ public class ServerThread extends Thread {
                   String command;
                   while(this.isRunning){
                         try{
-                              System.out.println("Sub - Thread : Waiting for command");
+                              System.out.println("Sub - Thread " + this.threadID + " : Waiting for command");
                               command = this.reader.readLine();
-                              System.out.println(command);
-                              if(command.startsWith("hello")){
-                                    float x = Float.parseFloat(command.substring(5,command.indexOf(",")));
-                                    float y = Float.parseFloat(command.substring(command.indexOf(",") + 1,command.indexOf(":")));
-                                    int dir = Integer.parseInt(command.substring(command.indexOf(":") + 1,command.length()));
-                                    clients.add(new ClientInfo(this.writer, x, y, dir));
-                                    System.out.println("Server : rec hello");
+                              if(command.startsWith("Hello")){
+                                    int ID = clients.size();
+                                    float x = ParseString.parseX(command);
+                                    float y = ParseString.parseY(command);
+                                    int dir = ParseString.parseDir(command);
+                                    clients.put(ID, new ClientInfo(this.writer, x, y, dir, ID));
+                                    this.writer.write("InitID" + ID + "\n");
+                                    this.writer.flush();
+                                    sendGets(this.writer);
+                                    sendRegister(ID, dir, x, y);
+                                    System.out.println("Sub - Thread " + this.threadID + " : Client requested register");
+                                    System.out.println("Current Clients : " + clients.size());
                               }
-                              else if(command.startsWith("Update"))System.out.println("kuy");
+                              else if(command.startsWith("Update")){
+                                    int ID = ParseString.parseID(command, 6);
+                                    int dir = ParseString.parseDir(command);
+                                    float x = ParseString.parseX(command);
+                                    float y = ParseString.parseY(command);
+                                    clients.get(ID).setPos(x, y, dir);
+                                    sendUpdate(ID, dir, x, y);
+                                    System.out.println("Sub - Thread " + this.threadID + " : Client requested Update");
+                              }
                         }
                         catch(IOException e){
                               e.printStackTrace();
@@ -101,11 +157,13 @@ public class ServerThread extends Thread {
             private float x;
             private float y;
             private int dir;
+            private int ID;
             private BufferedWriter writer;
 
-            public ClientInfo(BufferedWriter writer, float x, float y, int dir){
+            public ClientInfo(BufferedWriter writer, float x, float y, int dir, int ID){
                   this.x = x;
                   this.y = y;
+                  this.ID = ID;
                   this.dir = dir;
                   this.writer = writer;
             }
@@ -118,20 +176,22 @@ public class ServerThread extends Thread {
                   return this.y;
             }
 
-            public void setX(float x){
+            public int getID(){
+                  return this.ID;
+            }
+
+            public void setPos(float x, float y, int dir){
                   this.x = x;
-            }
-
-            public void setY(float y){
                   this.y = y;
-            }
-
-            public void setDir(int dir){
                   this.dir = dir;
             }
 
             public int getDir(){
                   return this.dir;
+            }
+
+            public BufferedWriter getWriter(){
+                  return this.writer;
             }
       }
 }
