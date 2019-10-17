@@ -31,11 +31,10 @@ public class Tank extends Entity{
             this.moveSpeed = 2;
             this.hp = MAX_HP;
             this.isDead = false;
-            this.visible = true;
+            this.visible = false;
             this.key = new Key();
-            this.sprite = new Sprite(new Texture(Gdx.files.internal("tank.png")));
-            this.collisionBox = new CollisionBox(x, y, this.sprite.getWidth(), this.sprite.getHeight());
             this.ID = ID;
+            this.collisionBox = new CollisionBox(x, y, 0, 0);
       }
 
       public void update(float delta){
@@ -125,6 +124,17 @@ public class Tank extends Entity{
       public void setPos(float x, float y, int dir){
             this.collisionBox.set(x,y);
             this.direction = dir;
+      }
+
+      public void setSprite(){
+            this.sprite = new Sprite(new Texture(Gdx.files.internal("tank.png")));
+            this.collisionBox.setWidth(this.sprite.getWidth());
+            this.collisionBox.setHeight(this.sprite.getHeight());
+            this.visible = true;
+      }
+
+      public Sprite getSprite(){
+            return this.sprite;
       }
 
       public int getID(){

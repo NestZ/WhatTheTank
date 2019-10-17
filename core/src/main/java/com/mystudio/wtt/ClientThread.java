@@ -11,7 +11,7 @@ public class ClientThread extends Thread {
       private boolean isRunning = true;
       private BufferedReader reader;
       private int clientID;
-      private HashMap<Integer, Tank> tanks;
+      public HashMap<Integer, Tank> tanks;
       
       public ClientThread(Socket clientSocket) throws SocketException{
             this.tanks = new HashMap<>();
@@ -35,40 +35,47 @@ public class ClientThread extends Thread {
                         e.printStackTrace();
                   }
                   if(command.startsWith("InitID")){
-                        int ID = Integer.parseInt(command.substring(6, 7));
+                        int ID = ParseString.parseID(command, 6);
                         this.clientID = ID;
-                        try{
-                              command = this.reader.readLine();
-                        }
-                        catch(IOException e){
-                              e.printStackTrace();
-                        }
-                        if(command.startsWith("GETS")){
-                              int n = Integer.parseInt(command.substring(4, 5));
-                              for(int i = 0;i < n;i++){
-                                    try{
-                                          command = this.reader.readLine();
-                                    }
-                                    catch(IOException e){
-                                          e.printStackTrace();
-                                    }
-                                    if(command.startsWith("GET" + i)){
-                                          int id = Integer.parseInt(command.substring(4, command.indexOf("x")));
-                                          int dir = Integer.parseInt(command.substring(command.indexOf(":") + 1, command.indexOf(":") + 2));
-                                          float x = Float.parseFloat(command.substring(command.indexOf("x") + 1, command.indexOf("y")));
-                                          float y = Float.parseFloat(command.substring(command.indexOf("y") + 1, command.indexOf(":")));
-                                          this.addToMap("color", x, y, dir, id);
-                                    }
+                  }
+                  else if(command.startsWith("GETS")){
+                        int n = ParseString.parseID(command, 4);
+                        for(int i = 0;i < n;i++){
+                              try{
+                                    command = this.reader.readLine();
+                              }
+                              catch(IOException e){
+                                    e.printStackTrace();
+                              }
+                              if(command.startsWith("GET" + i)){
+                                    int ID = ParseString.parseID(command, 4);
+                                    int dir = ParseString.parseDir(command);
+                                    float x = ParseString.parseX(command);
+                                    float y = ParseString.parseY(command);
+                                    this.addToMap("c", x, y, dir, ID);
                               }
                         }
                   }
+                  else if(command.startsWith("REG")){
+                        int ID = ParseString.parseID(command, 3);
+                        int dir = ParseString.parseDir(command);
+                        float x = ParseString.parseX(command);
+                        float y = ParseString.parseY(command);
+                        this.addToMap("c", x, y, dir, ID);
+                  }
                   else if(command.startsWith("Update")){
-                        int ID = Integer.parseInt(command.substring(6,7));
-                        int dir = Integer.parseInt(command.substring(command.indexOf(":") + 1,command.indexOf(":") + 2));
-                        float x = Float.parseFloat(command.substring(command.indexOf("x") + 1,command.indexOf("y")));
-                        float y = Float.parseFloat(command.substring(command.indexOf("y") + 1,command.indexOf(":")));
+                        int ID = ParseString.parseID(command, 6);
+                        int dir = ParseString.parseDir(command);
+                        float x = ParseString.parseX(command);
+                        float y = ParseString.parseY(command);
                         tanks.get(ID).setPos(x, y, dir);
                   }
+            }
+            try{
+                  this.reader.close();
+            }
+            catch(IOException e){
+                  e.printStackTrace();
             }
       }
 
@@ -84,11 +91,11 @@ public class ClientThread extends Thread {
             return this.tanks.size();
       }
 
-      public void addToMap(String color, float x, float y, int dir){
-            this.tanks.put(this.getID(), new Tank(color, x, y, dir, this.getID()));
+      public HashMap<Integer, Tank> getTanks(){
+            return this.tanks;
       }
 
       public void addToMap(String color, float x, float y, int dir, int ID){
-            this.tanks.put(ID, new Tank(color, x, y, dir, ID));
+            if(!this.tanks.containsKey(ID))this.tanks.put(ID, new Tank(color, x, y, dir, ID));
       }
 }

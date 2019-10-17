@@ -16,7 +16,7 @@ public class ClientStarter {
                   this.writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
                   try{
                         Thread.sleep(100);
-                        this.writer.write("Hello" + x + "," + y + ":" + dir + "\n");
+                        this.writer.write("Hello" + "x" + x + "y" + y + ":" + dir + "\n");
                         this.writer.flush();
                         Thread.sleep(500);
                   }
@@ -25,7 +25,7 @@ public class ClientStarter {
                   }
                   this.clientThread = new ClientThread(this.clientSocket);
                   this.clientThread.start();
-                  this.clientThread.addToMap("c", x, y, dir);
+                  this.clientThread.addToMap("c", x, y, dir, this.clientThread.getID());
             }
             catch(IOException e){
                   e.printStackTrace();
@@ -38,7 +38,7 @@ public class ClientStarter {
                   this.writer.flush();
             }
             catch(IOException e){
-                  System.out.println("can not send to server");
+                  System.out.println("Can not send to server");
             }
       }
 }

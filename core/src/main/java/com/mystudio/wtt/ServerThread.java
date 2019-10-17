@@ -54,13 +54,42 @@ public class ServerThread extends Thread {
 
       public void sendUpdate(int ID, int dir, float x, float y){
             for(int i = 0;i < clients.size();i++){
+                  BufferedWriter writer = clients.get(i).getWriter();
                   try{
-                        clients.get(i).getWriter().write("Update" + ID + "x" + x + "y" + y + ":" + dir + "\n");
-                        clients.get(i).getWriter().flush();
+                        writer.write("Update" + ID + "x" + x + "y" + y + ":" + dir + "\n");
+                        writer.flush();
                   }
                   catch(IOException e){
                         e.printStackTrace();
                   }
+            }
+      }
+
+      public void sendRegister(int ID, int dir, float x, float y){
+            for(int i = 0;i < clients.size();i++){
+                  BufferedWriter writer = clients.get(i).getWriter();
+                  try{
+                        writer.write("REG" + ID + "x" + x + "y" + y + ":" + dir + "\n");
+                        writer.flush();
+                  }
+                  catch(IOException e){
+                        e.printStackTrace();
+                  }
+            }
+      }
+
+      public void sendGets(BufferedWriter writer){
+            try{
+                  writer.write("GETS" + clients.size() + "\n");
+                  writer.flush();
+                  for(int i = 0;i < clients.size();i++){
+                        ClientInfo client = clients.get(i);
+                        writer.write("GET" + i + client.getID() + "x" + client.getX() + "y" + client.getY() + ":" + client.getDir() + "\n");
+                        writer.flush();
+                  }
+            }
+            catch(IOException e){
+                  e.printStackTrace();
             }
       }
 
@@ -86,30 +115,24 @@ public class ServerThread extends Thread {
                               System.out.println("Sub - Thread " + this.threadID + " : Waiting for command");
                               command = this.reader.readLine();
                               if(command.startsWith("Hello")){
-                                    float x = Float.parseFloat(command.substring(5,command.indexOf(",")));
-                                    float y = Float.parseFloat(command.substring(command.indexOf(",") + 1,command.indexOf(":")));
-                                    int dir = Integer.parseInt(command.substring(command.indexOf(":") + 1,command.indexOf(":") + 2));
-                                    clients.put(clients.size(), new ClientInfo(this.writer, x, y, dir, clients.size()));
-                                    this.writer.write("InitID" + (clients.size() - 1) + "\n");
+                                    int ID = clients.size();
+                                    float x = ParseString.parseX(command);
+                                    float y = ParseString.parseY(command);
+                                    int dir = ParseString.parseDir(command);
+                                    clients.put(ID, new ClientInfo(this.writer, x, y, dir, ID));
+                                    this.writer.write("InitID" + ID + "\n");
                                     this.writer.flush();
-                                    this.writer.write("GETS" + clients.size() + "\n");
-                                    this.writer.flush();
-                                    for(int i = 0;i < clients.size();i++){
-                                          ClientInfo client = clients.get(i);
-                                          this.writer.write("GET" + i + client.getID() + "x" + client.getX() + "y" + client.getY() + ":" + client.getDir());
-                                          this.writer.flush();
-                                    }
+                                    sendGets(this.writer);
+                                    sendRegister(ID, dir, x, y);
                                     System.out.println("Sub - Thread " + this.threadID + " : Client requested register");
                                     System.out.println("Current Clients : " + clients.size());
                               }
                               else if(command.startsWith("Update")){
-                                    int ID = Integer.parseInt(command.substring(6,7));
-                                    int dir = Integer.parseInt(command.substring(command.indexOf(":") + 1,command.indexOf(":") + 2));
-                                    float x = Float.parseFloat(command.substring(command.indexOf("x") + 1,command.indexOf("y")));
-                                    float y = Float.parseFloat(command.substring(command.indexOf("y") + 1,command.indexOf(":")));
-                                    clients.get(ID).setX(x);
-                                    clients.get(ID).setY(y);
-                                    clients.get(ID).setDir(dir);
+                                    int ID = ParseString.parseID(command, 6);
+                                    int dir = ParseString.parseDir(command);
+                                    float x = ParseString.parseX(command);
+                                    float y = ParseString.parseY(command);
+                                    clients.get(ID).setPos(x, y, dir);
                                     sendUpdate(ID, dir, x, y);
                                     System.out.println("Sub - Thread " + this.threadID + " : Client requested Update");
                               }
@@ -157,15 +180,9 @@ public class ServerThread extends Thread {
                   return this.ID;
             }
 
-            public void setX(float x){
+            public void setPos(float x, float y, int dir){
                   this.x = x;
-            }
-
-            public void setY(float y){
                   this.y = y;
-            }
-
-            public void setDir(int dir){
                   this.dir = dir;
             }
 
