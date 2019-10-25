@@ -52,11 +52,12 @@ public class ServerThread extends Thread {
             }
       }
 
-      public void sendUpdate(int ID, int dir, float x, float y){
+      public void sendUpdate(int ID, char moveDir, int status){
             for(int i = 0;i < clients.size();i++){
                   BufferedWriter writer = clients.get(i).getWriter();
                   try{
-                        writer.write("Update" + ID + "x" + x + "y" + y + ":" + dir + "\n");
+                        System.out.println("Update" + ID + moveDir + Integer.toString(status));
+                        writer.write("Update" + ID + moveDir + Integer.toString(status) + "\n");
                         writer.flush();
                   }
                   catch(IOException e){
@@ -129,11 +130,9 @@ public class ServerThread extends Thread {
                               }
                               else if(command.startsWith("Update")){
                                     int ID = ParseString.parseID(command, 6);
-                                    int dir = ParseString.parseDir(command);
-                                    float x = ParseString.parseX(command);
-                                    float y = ParseString.parseY(command);
-                                    clients.get(ID).setPos(x, y, dir);
-                                    sendUpdate(ID, dir, x, y);
+                                    char moveDir = command.charAt(7);
+                                    int status = ParseString.parseID(command, 8);
+                                    sendUpdate(ID, moveDir, status);
                                     System.out.println("Sub - Thread " + this.threadID + " : Client requested Update");
                               }
                         }

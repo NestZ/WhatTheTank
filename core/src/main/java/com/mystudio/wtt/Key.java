@@ -6,23 +6,21 @@ public class Key{
       public boolean upKey;
       public boolean downKey;
 
-      public void setUp(boolean b){
-            if(this.downKey && b)this.downKey = false;
-            this.upKey = b;
-      }
-
-      public void setDown(boolean b){
-            if(this.upKey && b)this.upKey = false;
-            this.downKey = b;
-      }
-
-      public void setLeft(boolean b){
-            if(this.rightKey && b)this.rightKey = false;
-            this.leftKey = b;
-      }
-
-      public void setRight(boolean b){
-            if(this.leftKey && b)this.leftKey = false;
-            this.rightKey = b;
+      public void setKey(char moveDir, int status){
+            boolean b = false;
+            if(status == 1)b = true;
+            switch(moveDir){
+                  case 'u' :
+                        this.upKey = b;
+                        break;
+                  case 'd' :
+                        this.downKey = b;
+                        break;
+                  case 'l' :
+                        this.leftKey = b;
+                        break;
+                  case 'r' :
+                        this.rightKey = b;
+            }
       }
 }

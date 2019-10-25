@@ -19,6 +19,7 @@ public class Field{
             this.collisionHandler = new CollisionHandler();
             this.server = new ServerStarter();
             this.client = new ClientStarter("127.0.0.1", 1234, 0, 0, 0);
+            while(!ClientStarter.isReady);
             this.clientID = this.client.clientThread.getID();
             this.tanks = this.client.clientThread.getTanks();
             this.inputHandler = new InputHandler(this.tanks.get(this.clientID), this.client);
@@ -33,22 +34,24 @@ public class Field{
 
       public void update(float delta){
             if(this.clientsNum != this.tanks.size())this.registerNewTank();
-            this.checkTankCollision();
+            this.setTankCollision();
             for(int i = 0;i < this.tanks.size();i++)this.tanks.get(i).update(delta);
-            if(this.inputHandler.keyDown)this.inputHandler.sendToServer();
             this.wall.update(delta);
       }
 
       public void registerNewTank(){
             for(int i = 0;i < this.tanks.size();i++){
-                  if(this.tanks.get(i).getSprite() == null){
-                        this.tanks.get(i).setSprite();
+                  try{
+                        if(this.tanks.get(i).getSprite() == null)this.tanks.get(i).setSprite();
+                  }
+                  catch(Exception e){
+                        e.printStackTrace();
                   }
             }
             this.clientsNum = this.tanks.size();
       }
 
-      public void checkTankCollision(){
+      public void setTankCollision(){
             switch(this.collisionHandler.isCollide()){
                   case 'R' :
                         this.tanks.get(this.clientID).setValidMove('R', false);break;

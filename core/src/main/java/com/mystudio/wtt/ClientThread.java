@@ -37,6 +37,7 @@ public class ClientThread extends Thread {
                   if(command.startsWith("InitID")){
                         int ID = ParseString.parseID(command, 6);
                         this.clientID = ID;
+                        ClientStarter.isReady = true;
                   }
                   else if(command.startsWith("GETS")){
                         int n = ParseString.parseID(command, 4);
@@ -65,10 +66,9 @@ public class ClientThread extends Thread {
                   }
                   else if(command.startsWith("Update")){
                         int ID = ParseString.parseID(command, 6);
-                        int dir = ParseString.parseDir(command);
-                        float x = ParseString.parseX(command);
-                        float y = ParseString.parseY(command);
-                        tanks.get(ID).setPos(x, y, dir);
+                        char moveDir = command.charAt(7);
+                        int status = ParseString.parseID(command, 8);
+                        this.tanks.get(ID).key.setKey(moveDir, status);
                   }
             }
             try{

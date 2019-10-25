@@ -7,7 +7,7 @@ import org.mini2Dx.core.engine.geom.CollisionBox;
 import org.mini2Dx.core.graphics.Sprite;
 
 public class Tank extends Entity{
-      private Key key;
+      public Key key;
       private final int TEAM;
       private final int MAX_HP;
       private final String COLOR;
@@ -52,28 +52,8 @@ public class Tank extends Entity{
             if(this.visible)g.drawSprite(this.sprite, this.collisionBox.getRenderX(), this.collisionBox.getRenderY());
       }
 
-      public void setMove(int move){
-            switch(move){
-                  case 1 : 
-                        this.key.setUp(true);break;
-                  case 2 :
-                        this.key.setDown(true);break;
-                  case 3 :
-                        this.key.setLeft(true);break;
-                  case 4 :
-                        this.key.setRight(true);break;
-                  case 5 :
-                        this.key.setUp(false);break;
-                  case 6 :
-                        this.key.setDown(false);break;
-                  case 7 :
-                        this.key.setLeft(false);break;
-                  case 8 :
-                        this.key.setRight(false);
-            }
-      }
-
       private void updateMove(){
+            //System.out.println("u " + this.key.upKey + " d " + this.key.downKey + " l " + this.key.leftKey + " r " + this.key.rightKey);
             if(this.key.upKey && this.isUValid){
                   this.moveUp();
             }
@@ -91,13 +71,16 @@ public class Tank extends Entity{
       public void setValidMove(char c,boolean b){
             switch (c){
                   case 'R' :
-                        this.isRValid = b;break;
+                        this.isRValid = b;
+                        break;
                   case 'L' :
-                        this.isLValid = b;break;
+                        this.isLValid = b;
+                        break;
                   case 'U' :
-                        this.isUValid = b;break;
+                        this.isUValid = b;
+                        break;
                   case 'D' :
-                        this.isDValid = b;break;
+                        this.isDValid = b;
             }
       }
 

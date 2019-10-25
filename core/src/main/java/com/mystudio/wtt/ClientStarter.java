@@ -6,6 +6,7 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 
 public class ClientStarter {
+      public static boolean isReady = false;
       public ClientThread clientThread;
       private Socket clientSocket;
       private BufferedWriter writer;
