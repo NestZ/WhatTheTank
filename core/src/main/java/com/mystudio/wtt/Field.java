@@ -28,15 +28,7 @@ public class Field{
       }
 
       public void setCollision(){
-            this.collisionHandler.setTank(this.tanks.get(this.clientID));
             this.collisionHandler.setWall(this.wall);
-      }
-
-      public void update(float delta){
-            if(this.clientsNum != this.tanks.size())this.registerNewTank();
-            this.setTankCollision();
-            for(int i = 0;i < this.tanks.size();i++)this.tanks.get(i).update(delta);
-            this.wall.update(delta);
       }
 
       public void registerNewTank(){
@@ -52,26 +44,41 @@ public class Field{
       }
 
       public void setTankCollision(){
-            switch(this.collisionHandler.isCollide()){
-                  case 'R' :
-                        this.tanks.get(this.clientID).setValidMove('R', false);break;
-                  case 'L' :
-                        this.tanks.get(this.clientID).setValidMove('L', false);break;
-                  case 'U' :
-                        this.tanks.get(this.clientID).setValidMove('U', false);break;
-                  case 'D' :
-                        this.tanks.get(this.clientID).setValidMove('D', false);break;
-                  default :
-                        this.tanks.get(this.clientID).setValidMove('R', true);
-                        this.tanks.get(this.clientID).setValidMove('L', true);
-                        this.tanks.get(this.clientID).setValidMove('U', true);
-                        this.tanks.get(this.clientID).setValidMove('D', true);
+            for(int i = 0;i < tanks.size();i++){
+                  Tank tank = this.tanks.get(i);
+                  switch(this.collisionHandler.isCollide(tank)){
+                        case 'R' :
+                              tank.setValidMove('R', false);break;
+                        case 'L' :
+                              tank.setValidMove('L', false);break;
+                        case 'U' :
+                              tank.setValidMove('U', false);break;
+                        case 'D' :
+                              tank.setValidMove('D', false);break;
+                        default :
+                              tank.setValidMove('R', true);
+                              tank.setValidMove('L', true);
+                              tank.setValidMove('U', true);
+                              tank.setValidMove('D', true);
+                  }
             }
       }
 
+      public void update(float delta){
+            if(this.clientsNum != this.tanks.size())this.registerNewTank();
+            this.setTankCollision();
+            for(int i = 0;i < this.tanks.size();i++)this.tanks.get(i).update(delta);
+            this.wall.update(delta);
+      }
+
       public void interpolate(float alpha){
-            for(int i = 0;i < this.tanks.size();i++)this.tanks.get(i).interpolate(alpha);
+            try{
+                  for(int i = 0;i < this.tanks.size();i++)this.tanks.get(i).interpolate(alpha);
             this.wall.interpolate(alpha);
+            }
+            catch(NullPointerException e){
+                  System.out.println("kuyyyyyyyyyyyy");
+            }
       }
 
       public void render(Graphics g){

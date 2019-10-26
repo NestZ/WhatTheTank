@@ -11,7 +11,7 @@ public class ClientThread extends Thread {
       private boolean isRunning = true;
       private BufferedReader reader;
       private int clientID;
-      public HashMap<Integer, Tank> tanks;
+      private HashMap<Integer, Tank> tanks;
       
       public ClientThread(Socket clientSocket) throws SocketException{
             this.tanks = new HashMap<>();

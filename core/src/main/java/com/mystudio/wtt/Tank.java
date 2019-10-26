@@ -21,6 +21,10 @@ public class Tank extends Entity{
       private boolean isLValid;
       private boolean isUValid;
       private boolean isDValid;
+      public CollisionBox tankR;
+      public CollisionBox tankL;
+      public CollisionBox tankU;
+      public CollisionBox tankD;
       private int ID;
       private float moveSpeed;
 
@@ -28,19 +32,23 @@ public class Tank extends Entity{
             this.TEAM = team;
             this.MAX_HP = 3;
             this.COLOR = color;
-            this.moveSpeed = 2;
+            this.moveSpeed = 1.5f;
             this.hp = MAX_HP;
             this.isDead = false;
             this.visible = false;
             this.key = new Key();
             this.ID = ID;
             this.collisionBox = new CollisionBox(x, y, 0, 0);
+            this.tankR = new CollisionBox();
+            this.tankL = new CollisionBox();
+            this.tankU = new CollisionBox();
+            this.tankD = new CollisionBox();
       }
 
       public void update(float delta){
             if(this.visible){
                   this.collisionBox.preUpdate();
-                  this.updateMove();
+                  this.updateMove(delta);
             }
       }
 
@@ -52,19 +60,18 @@ public class Tank extends Entity{
             if(this.visible)g.drawSprite(this.sprite, this.collisionBox.getRenderX(), this.collisionBox.getRenderY());
       }
 
-      private void updateMove(){
-            //System.out.println("u " + this.key.upKey + " d " + this.key.downKey + " l " + this.key.leftKey + " r " + this.key.rightKey);
+      private void updateMove(float delta){
             if(this.key.upKey && this.isUValid){
-                  this.moveUp();
+                  this.moveUp(delta);
             }
             if(this.key.downKey && this.isDValid){
-                  this.moveDown();
+                  this.moveDown(delta);
             }
             if(this.key.leftKey && this.isLValid){
-                  this.moveLeft();
+                  this.moveLeft(delta);
             }
             if(this.key.rightKey && this.isRValid){
-                  this.moveRight();
+                  this.moveRight(delta);
             }
       }
 
@@ -88,20 +95,20 @@ public class Tank extends Entity{
             return this.collisionBox;
       }
 
-      private void moveLeft(){
-            this.collisionBox.set(this.collisionBox.getX() - this.moveSpeed, this.collisionBox.getY());
+      private void moveLeft(float delta){
+            this.collisionBox.set(this.collisionBox.getX() - (this.moveSpeed * delta * 100), this.collisionBox.getY());
       }
 
-      private void moveRight(){
-            this.collisionBox.set(this.collisionBox.getX() + this.moveSpeed, this.collisionBox.getY());
+      private void moveRight(float delta){
+            this.collisionBox.set(this.collisionBox.getX() + (this.moveSpeed * delta * 100), this.collisionBox.getY());
       }
 
-      private void moveUp(){
-            this.collisionBox.set(this.collisionBox.getX(), this.collisionBox.getY() - this.moveSpeed);
+      private void moveUp(float delta){
+            this.collisionBox.set(this.collisionBox.getX(), this.collisionBox.getY() - (this.moveSpeed * delta * 100));
       }
 
-      private void moveDown(){
-            this.collisionBox.set(this.collisionBox.getX(), this.collisionBox.getY() + this.moveSpeed);
+      private void moveDown(float delta){
+            this.collisionBox.set(this.collisionBox.getX(), this.collisionBox.getY() + (this.moveSpeed * delta * 100));
       }
 
       public void setPos(float x, float y, int dir){
