@@ -1,40 +1,25 @@
 package com.mystudio.wtt;
 
-import org.mini2Dx.core.engine.geom.CollisionBox;
-
 public class CollisionHandler{
-      private Tank tank;
-      private CollisionBox tankR;
-      private CollisionBox tankL;
-      private CollisionBox tankU;
-      private CollisionBox tankD;
       private Wall wall;
-
-      public void setTank(Tank tank){
-            this.tank = tank;
-            this.tankR = new CollisionBox();
-            this.tankL = new CollisionBox();
-            this.tankU = new CollisionBox();
-            this.tankD = new CollisionBox();
-      }
 
       public void setWall(Wall wall){
             this.wall = wall;
       }
 
-      public char isCollide(){
-            this.setTankCollisionBox();
-            if(this.tankR.intersects(this.wall.collisionBox()))return 'R';
-            else if(this.tankL.intersects(this.wall.collisionBox()))return 'L';
-            else if(this.tankU.intersects(this.wall.collisionBox()))return 'U';
-            else if(this.tankD.intersects(this.wall.collisionBox()))return 'D';
+      public char isCollide(Tank tank){
+            this.setTankCollisionBox(tank);
+            if(tank.moveBox().R().intersects(this.wall.collisionBox()))return 'R';
+            else if(tank.moveBox().L().intersects(this.wall.collisionBox()))return 'L';
+            else if(tank.moveBox().U().intersects(this.wall.collisionBox()))return 'U';
+            else if(tank.moveBox().D().intersects(this.wall.collisionBox()))return 'D';
             return '\0';
       }
 
-      private void setTankCollisionBox(){
-            this.tankR.set(this.tank.getX() + this.tank.getWidth(), this.tank.getY() + 3, 1f, this.tank.getHeight() - 6);
-            this.tankL.set(this.tank.getX() - 1,this.tank.getY() + 3, 1f,this.tank.getHeight() - 6);
-            this.tankU.set(this.tank.getX() + 3, this.tank.getY() - 1, this.tank.getWidth() - 6, 1f);
-            this.tankD.set(this.tank.getX() + 3, this.tank.getY() + this.tank.getHeight(), this.tank.getWidth() - 6, 1f);
+      private void setTankCollisionBox(Tank tank){
+            tank.moveBox().R().set(tank.getX() + tank.getWidth(), tank.getY() + 3, 1f, tank.getHeight() - 6);
+            tank.moveBox().L().set(tank.getX() - 1, tank.getY() + 3, 1f, tank.getHeight() - 6);
+            tank.moveBox().U().set(tank.getX() + 3, tank.getY() - 1, tank.getWidth() - 6, 1f);
+            tank.moveBox().D().set(tank.getX() + 3, tank.getY() + tank.getHeight(), tank.getWidth() - 6, 1f);
       }
 }

@@ -13,27 +13,27 @@ public class InputHandler implements InputProcessor{
             this.client = client;
       }
 
-      public void sendToServer(){
-            this.client.sendToServer("Update" + this.tank.getID() + "x" + this.tank.getX() + "y" + this.tank.getY() + ":" + this.tank.getDir());
+      public void sendToServer(char moveDir, int status){
+            this.client.sendToServer("Update" + this.tank.getID() + moveDir + Integer.toString(status) +
+                                    "x" + this.tank.getX() + "y" + this.tank.getY() + ":");
       }
       
       @Override
       public boolean keyDown (int keycode){
             this.keyDown = true;
             switch(keycode){
-                  case Keys.UP : 
-                        this.tank.setMove(1);
+                  case Keys.UP :
+                        this.sendToServer('u', 1);
                         break;
                   case Keys.DOWN :
-                        this.tank.setMove(2);
+                        this.sendToServer('d', 1);
                         break;
                   case Keys.LEFT :
-                        this.tank.setMove(3);
+                        this.sendToServer('l', 1);
                         break;
                   case Keys.RIGHT :
-                        this.tank.setMove(4);
+                        this.sendToServer('r', 1);
                         break;
-                  default : this.tank.setMove(0);
             }
             return false;
       }
@@ -42,19 +42,18 @@ public class InputHandler implements InputProcessor{
       public boolean keyUp (int keycode){
             this.keyDown = false;
             switch(keycode){
-                  case Keys.UP : 
-                        this.tank.setMove(5);
+                  case Keys.UP :
+                        this.sendToServer('u', 0);
                         break;
                   case Keys.DOWN :
-                        this.tank.setMove(6);
+                        this.sendToServer('d', 0);
                         break;
                   case Keys.LEFT :
-                        this.tank.setMove(7);
+                        this.sendToServer('l', 0);
                         break;
                   case Keys.RIGHT :
-                        this.tank.setMove(8);
+                        this.sendToServer('r', 0);
                         break;
-                  default : this.tank.setMove(0);
             }
             return false;
       }

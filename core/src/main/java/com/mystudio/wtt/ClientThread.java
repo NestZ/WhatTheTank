@@ -11,7 +11,7 @@ public class ClientThread extends Thread {
       private boolean isRunning = true;
       private BufferedReader reader;
       private int clientID;
-      public HashMap<Integer, Tank> tanks;
+      private HashMap<Integer, Tank> tanks;
       
       public ClientThread(Socket clientSocket) throws SocketException{
             this.tanks = new HashMap<>();
@@ -37,6 +37,7 @@ public class ClientThread extends Thread {
                   if(command.startsWith("InitID")){
                         int ID = ParseString.parseID(command, 6);
                         this.clientID = ID;
+                        ClientStarter.isReady(true);
                   }
                   else if(command.startsWith("GETS")){
                         int n = ParseString.parseID(command, 4);
@@ -65,10 +66,13 @@ public class ClientThread extends Thread {
                   }
                   else if(command.startsWith("Update")){
                         int ID = ParseString.parseID(command, 6);
-                        int dir = ParseString.parseDir(command);
+                        char moveDir = command.charAt(7);
+                        int status = ParseString.parseID(command, 8);
                         float x = ParseString.parseX(command);
                         float y = ParseString.parseY(command);
-                        tanks.get(ID).setPos(x, y, dir);
+                        Tank tank = this.tanks.get(ID);
+                        if(status == 0)tank.setPos(x, y, tank.getDir());
+                        tank.key().set(moveDir, status);
                   }
             }
             try{

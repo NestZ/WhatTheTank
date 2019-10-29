@@ -1,28 +1,42 @@
 package com.mystudio.wtt;
 
 public class Key{
-      public boolean leftKey;
-      public boolean rightKey;
-      public boolean upKey;
-      public boolean downKey;
+      private boolean left;
+      private boolean right;
+      private boolean up;
+      private boolean down;
 
-      public void setUp(boolean b){
-            if(this.downKey && b)this.downKey = false;
-            this.upKey = b;
+      public void set(char moveDir, int status){
+            boolean b = false;
+            if(status == 1)b = true;
+            switch(moveDir){
+                  case 'u' :
+                        this.up = b;
+                        break;
+                  case 'd' :
+                        this.down = b;
+                        break;
+                  case 'l' :
+                        this.left = b;
+                        break;
+                  case 'r' :
+                        this.right = b;
+            }
       }
 
-      public void setDown(boolean b){
-            if(this.upKey && b)this.upKey = false;
-            this.downKey = b;
+      public boolean left(){
+            return this.left;
       }
 
-      public void setLeft(boolean b){
-            if(this.rightKey && b)this.rightKey = false;
-            this.leftKey = b;
+      public boolean right(){
+            return this.right;
       }
 
-      public void setRight(boolean b){
-            if(this.leftKey && b)this.leftKey = false;
-            this.rightKey = b;
+      public boolean down(){
+            return this.down;
+      }
+
+      public boolean up(){
+            return this.up;
       }
 }
