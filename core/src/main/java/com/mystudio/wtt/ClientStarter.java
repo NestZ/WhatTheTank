@@ -6,8 +6,8 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 
 public class ClientStarter {
-      public static boolean isReady = false;
-      public ClientThread clientThread;
+      private static boolean isReady = false;
+      private ClientThread thread;
       private Socket clientSocket;
       private static BufferedWriter writer;
 
@@ -24,9 +24,9 @@ public class ClientStarter {
                   catch(InterruptedException e){
                         e.printStackTrace();
                   }
-                  this.clientThread = new ClientThread(this.clientSocket);
-                  this.clientThread.start();
-                  this.clientThread.addToMap("c", x, y, dir, this.clientThread.getID());
+                  this.thread = new ClientThread(this.clientSocket);
+                  this.thread.start();
+                  this.thread.addToMap("c", x, y, dir, this.thread.getID());
             }
             catch(IOException e){
                   e.printStackTrace();
@@ -41,5 +41,17 @@ public class ClientStarter {
             catch(IOException e){
                   System.out.println("Can not send to server");
             }
+      }
+
+      public ClientThread thread(){
+            return this.thread;
+      }
+
+      public static void isReady(boolean b){
+            ClientStarter.isReady = b;
+      }
+
+      public static boolean isReady(){
+            return ClientStarter.isReady;
       }
 }

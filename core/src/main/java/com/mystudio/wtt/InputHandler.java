@@ -14,7 +14,8 @@ public class InputHandler implements InputProcessor{
       }
 
       public void sendToServer(char moveDir, int status){
-            this.client.sendToServer("Update" + this.tank.getID() + moveDir + Integer.toString(status));
+            this.client.sendToServer("Update" + this.tank.getID() + moveDir + Integer.toString(status) +
+                                    "x" + this.tank.getX() + "y" + this.tank.getY() + ":");
       }
       
       @Override

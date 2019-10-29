@@ -19,9 +19,9 @@ public class Field{
             this.collisionHandler = new CollisionHandler();
             this.server = new ServerStarter();
             this.client = new ClientStarter("127.0.0.1", 1234, 0, 0, 0);
-            while(!ClientStarter.isReady);
-            this.clientID = this.client.clientThread.getID();
-            this.tanks = this.client.clientThread.getTanks();
+            while(!ClientStarter.isReady());
+            this.clientID = this.client.thread().getID();
+            this.tanks = this.client.thread().getTanks();
             this.inputHandler = new InputHandler(this.tanks.get(this.clientID), this.client);
             this.setCollision();
             Gdx.input.setInputProcessor(this.inputHandler);
@@ -48,18 +48,18 @@ public class Field{
                   Tank tank = this.tanks.get(i);
                   switch(this.collisionHandler.isCollide(tank)){
                         case 'R' :
-                              tank.setValidMove('R', false);break;
+                              tank.moveBox().setValidMove('R', false);break;
                         case 'L' :
-                              tank.setValidMove('L', false);break;
+                              tank.moveBox().setValidMove('L', false);break;
                         case 'U' :
-                              tank.setValidMove('U', false);break;
+                              tank.moveBox().setValidMove('U', false);break;
                         case 'D' :
-                              tank.setValidMove('D', false);break;
+                              tank.moveBox().setValidMove('D', false);break;
                         default :
-                              tank.setValidMove('R', true);
-                              tank.setValidMove('L', true);
-                              tank.setValidMove('U', true);
-                              tank.setValidMove('D', true);
+                              tank.moveBox().setValidMove('R', true);
+                              tank.moveBox().setValidMove('L', true);
+                              tank.moveBox().setValidMove('U', true);
+                              tank.moveBox().setValidMove('D', true);
                   }
             }
       }
@@ -74,7 +74,7 @@ public class Field{
       public void interpolate(float alpha){
             try{
                   for(int i = 0;i < this.tanks.size();i++)this.tanks.get(i).interpolate(alpha);
-            this.wall.interpolate(alpha);
+                  this.wall.interpolate(alpha);
             }
             catch(NullPointerException e){
                   System.out.println("kuyyyyyyyyyyyy");

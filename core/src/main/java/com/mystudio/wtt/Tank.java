@@ -7,7 +7,8 @@ import org.mini2Dx.core.engine.geom.CollisionBox;
 import org.mini2Dx.core.graphics.Sprite;
 
 public class Tank extends Entity{
-      public Key key;
+      private Key key;
+      private MoveBox moveBox;
       private final int TEAM;
       private final int MAX_HP;
       private final String COLOR;
@@ -17,38 +18,25 @@ public class Tank extends Entity{
       private CollisionBox collisionBox;
       private Sprite sprite;
       private int direction;
-      private boolean isRValid;
-      private boolean isLValid;
-      private boolean isUValid;
-      private boolean isDValid;
-      public CollisionBox tankR;
-      public CollisionBox tankL;
-      public CollisionBox tankU;
-      public CollisionBox tankD;
       private int ID;
-      private float moveSpeed;
 
       public Tank(String color, float x, float y, int team, int ID){
             this.TEAM = team;
             this.MAX_HP = 3;
             this.COLOR = color;
-            this.moveSpeed = 1.5f;
             this.hp = MAX_HP;
             this.isDead = false;
             this.visible = false;
-            this.key = new Key();
             this.ID = ID;
+            this.key = new Key();
             this.collisionBox = new CollisionBox(x, y, 0, 0);
-            this.tankR = new CollisionBox();
-            this.tankL = new CollisionBox();
-            this.tankU = new CollisionBox();
-            this.tankD = new CollisionBox();
+            this.moveBox = new MoveBox(collisionBox, 2f);
       }
 
       public void update(float delta){
             if(this.visible){
                   this.collisionBox.preUpdate();
-                  this.updateMove(delta);
+                  this.moveBox.update(delta, this.key);
             }
       }
 
@@ -60,55 +48,16 @@ public class Tank extends Entity{
             if(this.visible)g.drawSprite(this.sprite, this.collisionBox.getRenderX(), this.collisionBox.getRenderY());
       }
 
-      private void updateMove(float delta){
-            if(this.key.upKey && this.isUValid){
-                  this.moveUp(delta);
-            }
-            if(this.key.downKey && this.isDValid){
-                  this.moveDown(delta);
-            }
-            if(this.key.leftKey && this.isLValid){
-                  this.moveLeft(delta);
-            }
-            if(this.key.rightKey && this.isRValid){
-                  this.moveRight(delta);
-            }
-      }
-
-      public void setValidMove(char c,boolean b){
-            switch (c){
-                  case 'R' :
-                        this.isRValid = b;
-                        break;
-                  case 'L' :
-                        this.isLValid = b;
-                        break;
-                  case 'U' :
-                        this.isUValid = b;
-                        break;
-                  case 'D' :
-                        this.isDValid = b;
-            }
-      }
-
       public CollisionBox CollisionBox(){
             return this.collisionBox;
       }
 
-      private void moveLeft(float delta){
-            this.collisionBox.set(this.collisionBox.getX() - (this.moveSpeed * delta * 100), this.collisionBox.getY());
+      public MoveBox moveBox(){
+            return this.moveBox;
       }
 
-      private void moveRight(float delta){
-            this.collisionBox.set(this.collisionBox.getX() + (this.moveSpeed * delta * 100), this.collisionBox.getY());
-      }
-
-      private void moveUp(float delta){
-            this.collisionBox.set(this.collisionBox.getX(), this.collisionBox.getY() - (this.moveSpeed * delta * 100));
-      }
-
-      private void moveDown(float delta){
-            this.collisionBox.set(this.collisionBox.getX(), this.collisionBox.getY() + (this.moveSpeed * delta * 100));
+      public Key key(){
+            return this.key;
       }
 
       public void setPos(float x, float y, int dir){

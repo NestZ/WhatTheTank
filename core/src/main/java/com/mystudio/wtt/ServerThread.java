@@ -52,12 +52,11 @@ public class ServerThread extends Thread {
             }
       }
 
-      public void sendUpdate(int ID, char moveDir, int status){
+      public void sendUpdate(int ID, char moveDir, int status, float x, float y){
             for(int i = 0;i < clients.size();i++){
                   BufferedWriter writer = clients.get(i).getWriter();
                   try{
-                        System.out.println("Update" + ID + moveDir + Integer.toString(status));
-                        writer.write("Update" + ID + moveDir + Integer.toString(status) + "\n");
+                        writer.write("Update" + ID + moveDir + Integer.toString(status) + "x" + x + "y" + y + ":\n");
                         writer.flush();
                   }
                   catch(IOException e){
@@ -132,7 +131,10 @@ public class ServerThread extends Thread {
                                     int ID = ParseString.parseID(command, 6);
                                     char moveDir = command.charAt(7);
                                     int status = ParseString.parseID(command, 8);
-                                    sendUpdate(ID, moveDir, status);
+                                    float x = ParseString.parseX(command);
+                                    float y = ParseString.parseY(command);
+                                    if(status == 0)clients.get(ID).setPos(x, y);
+                                    sendUpdate(ID, moveDir, status, x, y);
                                     System.out.println("Sub - Thread " + this.threadID + " : Client requested Update");
                               }
                         }
@@ -167,6 +169,11 @@ public class ServerThread extends Thread {
                   this.writer = writer;
             }
 
+            public void setPos(float x, float y){
+                  this.x = x;
+                  this.y = y;
+            }
+
             public float getX(){
                   return this.x;
             }
@@ -177,12 +184,6 @@ public class ServerThread extends Thread {
 
             public int getID(){
                   return this.ID;
-            }
-
-            public void setPos(float x, float y, int dir){
-                  this.x = x;
-                  this.y = y;
-                  this.dir = dir;
             }
 
             public int getDir(){
