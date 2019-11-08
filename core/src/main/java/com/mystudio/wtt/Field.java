@@ -24,7 +24,6 @@ public class Field{
             this.tanks = this.client.thread().getTanks();
             this.inputHandler = new InputHandler(this.tanks.get(this.clientID), this.client);
             this.setCollision();
-            Gdx.input.setInputProcessor(this.inputHandler);
       }
 
       public void setCollision(){
@@ -65,6 +64,7 @@ public class Field{
       }
 
       public void update(float delta){
+            Gdx.input.setInputProcessor(this.inputHandler);
             if(this.clientsNum != this.tanks.size())this.registerNewTank();
             this.setTankCollision();
             for(int i = 0;i < this.tanks.size();i++)this.tanks.get(i).update(delta);
@@ -77,7 +77,7 @@ public class Field{
                   this.wall.interpolate(alpha);
             }
             catch(NullPointerException e){
-                  System.out.println("kuyyyyyyyyyyyy");
+                  System.out.println("ERROR ERROR ERROR ERROR ERROR ERROR");
             }
       }
 
