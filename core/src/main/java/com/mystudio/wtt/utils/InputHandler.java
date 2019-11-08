@@ -5,6 +5,7 @@ import com.mystudio.wtt.entity.tank.Tank;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
 import com.mystudio.wtt.client.ClientStarter;
+import com.mystudio.wtt.client.Protocol;
 
 public class InputHandler implements InputProcessor{
       private Tank tank;
@@ -17,8 +18,7 @@ public class InputHandler implements InputProcessor{
       }
 
       public void sendToServer(char moveDir, int status){
-            this.client.sendToServer("Update" + this.tank.getID() + moveDir + Integer.toString(status) +
-                                    "x" + this.tank.getX() + "y" + this.tank.getY() + ":");
+            this.client.sendToServer(Protocol.updatePackage(moveDir, status, this.tank.getID(), this.tank.getX(), this.tank.getY()));
       }
       
       @Override

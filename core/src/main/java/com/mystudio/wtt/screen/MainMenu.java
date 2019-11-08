@@ -46,6 +46,7 @@ public class MainMenu extends BasicGameScreen {
             }
             Objects.requireNonNull(mainMenuContainer); 
             TextButton newGameButton = (TextButton) mainMenuContainer.getElementById("newGameButton");
+            TextButton quitButton = (TextButton) mainMenuContainer.getElementById("quitButton");
             mainMenuContainer.shrinkToContents(true); 
             mainMenuContainer.setXY((mainMenuContainer.getWidth()) / 2, (mainMenuContainer.getHeight()) / 2);
             uiContainer.add(mainMenuContainer);
@@ -57,7 +58,18 @@ public class MainMenu extends BasicGameScreen {
 
                   @Override
                   public void onActionEnd(ActionEvent event){
-                        screenToLoad = Lobby.ID;
+                        screenToLoad = Connector.ID;
+                  }
+            });
+            quitButton.addActionListener(new ActionListener(){
+                  @Override
+                  public void onActionBegin(ActionEvent event){
+
+                  }
+
+                  @Override
+                  public void onActionEnd(ActionEvent event){
+                        System.exit(0);
                   }
             });
       }

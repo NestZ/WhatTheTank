@@ -20,7 +20,7 @@ import org.mini2Dx.ui.listener.ActionListener;
 import org.mini2Dx.ui.style.UiTheme;
 import com.mystudio.wtt.WhatTheTank;
 
-public class Lobby extends BasicGameScreen{
+public class Connector extends BasicGameScreen{
       private AssetManager assetManager;
       private UiContainer uiContainer;
       public final static int ID = 2;

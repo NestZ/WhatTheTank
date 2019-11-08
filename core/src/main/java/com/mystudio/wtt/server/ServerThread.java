@@ -57,7 +57,7 @@ public class ServerThread extends Thread {
             for(int i = 0;i < clients.size();i++){
                   BufferedWriter writer = clients.get(i).getWriter();
                   try{
-                        writer.write("Update" + ID + moveDir + Integer.toString(status) + "x" + x + "y" + y + ":\n");
+                        writer.write(Protocol.updatePackage(ID, moveDir, status, x, y));
                         writer.flush();
                   }
                   catch(IOException e){
@@ -70,7 +70,7 @@ public class ServerThread extends Thread {
             for(int i = 0;i < clients.size();i++){
                   BufferedWriter writer = clients.get(i).getWriter();
                   try{
-                        writer.write("REG" + ID + "x" + x + "y" + y + ":" + dir + "\n");
+                        writer.write(Protocol.registerPackage(ID, dir, x, y));
                         writer.flush();
                   }
                   catch(IOException e){
@@ -81,11 +81,11 @@ public class ServerThread extends Thread {
 
       public void sendGets(BufferedWriter writer){
             try{
-                  writer.write("GETS" + clients.size() + "\n");
+                  writer.write(Protocol.getsPackage(clients.size()));
                   writer.flush();
                   for(int i = 0;i < clients.size();i++){
                         ClientInfo client = clients.get(i);
-                        writer.write("GET" + i + client.getID() + "x" + client.getX() + "y" + client.getY() + ":" + client.getDir() + "\n");
+                        writer.write(Protocol.getPackage(i, client.getID(), client.getDir(), client.getX(), client.getY()));
                         writer.flush();
                   }
             }
@@ -121,7 +121,7 @@ public class ServerThread extends Thread {
                                     float y = ParseString.parseY(command);
                                     int dir = ParseString.parseDir(command);
                                     clients.put(ID, new ClientInfo(this.writer, x, y, dir, ID));
-                                    this.writer.write("InitID" + ID + "\n");
+                                    this.writer.write(Protocol.initPackage(ID));
                                     this.writer.flush();
                                     sendGets(this.writer);
                                     sendRegister(ID, dir, x, y);
@@ -137,6 +137,7 @@ public class ServerThread extends Thread {
                                     if(status == 0)clients.get(ID).setPos(x, y);
                                     sendUpdate(ID, moveDir, status, x, y);
                                     System.out.println("Sub - Thread " + this.threadID + " : Client requested Update");
+                                    System.out.println(command);
                               }
                         }
                         catch(IOException e){

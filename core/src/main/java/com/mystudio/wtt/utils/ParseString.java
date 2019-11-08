@@ -1,6 +1,8 @@
 package com.mystudio.wtt.utils;
 
 public class ParseString{
+      private ParseString(){}
+
       public static int parseID(String str, int start){
             return Integer.parseInt(str.substring(start, start + 1));
       }

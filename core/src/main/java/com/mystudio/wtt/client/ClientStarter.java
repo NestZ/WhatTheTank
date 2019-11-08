@@ -5,19 +5,36 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
+/**
+ * This class is used to start client's thread then use this thread to connecting given ip and port.
+ * 
+ * @author NestZ
+ */
+
 public class ClientStarter {
+      /**
+       * Field to store current thread info.
+       */
       private static boolean isReady = false;
+      private static BufferedWriter writer;
       private ClientThread thread;
       private Socket clientSocket;
-      private static BufferedWriter writer;
 
-      public ClientStarter(String hostName, int serverPort, int x, int y, int dir){
+      /**
+       * Constructor to initialize fields and make handshaking with server.
+       * @param hostName set hostname (or IP).
+       * @param serverPort set serverPort to connect.
+       * @param x client's initial x position.
+       * @param y client's initial y position.
+       * @param dir client's initial face direction.
+       */
+      public ClientStarter(String hostName, int serverPort, float x, float y, int dir){
             try{
                   this.clientSocket = new Socket(hostName, serverPort);
                   writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
                   try{
                         Thread.sleep(100);
-                        writer.write("Hello" + "x" + x + "y" + y + ":" + dir + "\n");
+                        writer.write(Protocol.helloPackage(dir, x, y));
                         writer.flush();
                         Thread.sleep(500);
                   }
@@ -33,9 +50,13 @@ public class ClientStarter {
             }
       }
 
+      /**
+       * Method to send package to server.
+       * @param command package (String).
+       */
       public void sendToServer(String command){
             try{
-                  writer.write(command + "\n");
+                  writer.write(command);
                   writer.flush();
             }
             catch(IOException e){
@@ -43,14 +64,26 @@ public class ClientStarter {
             }
       }
 
+      /**
+       * Return current thread.
+       * @return Current thread that communicating with server.
+       */
       public ClientThread thread(){
             return this.thread;
       }
 
+      /**
+       * Set thread's status.
+       * @param b true if connected to server otherwise false.
+       */
       public static void isReady(boolean b){
             ClientStarter.isReady = b;
       }
 
+      /**
+       * Return thread's status.
+       * @return true if connected to server otherwise return false.
+       */
       public static boolean isReady(){
             return ClientStarter.isReady;
       }
