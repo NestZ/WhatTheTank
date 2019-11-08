@@ -1,4 +1,4 @@
-package com.mystudio.wtt;
+package com.mystudio.wtt.utils;
 
 public class ParseString{
       public static int parseID(String str, int start){

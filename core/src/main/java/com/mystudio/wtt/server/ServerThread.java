@@ -1,4 +1,4 @@
-package com.mystudio.wtt;
+package com.mystudio.wtt.server;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,6 +9,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.HashMap;
+import com.mystudio.wtt.utils.ParseString;
 
 public class ServerThread extends Thread {
       private HashMap<Integer, ClientInfo> clients;

@@ -1,4 +1,4 @@
-package com.mystudio.wtt;
+package com.mystudio.wtt.screen;
 
 import java.util.Objects;
 import com.badlogic.gdx.Gdx;

@@ -1,7 +1,10 @@
-package com.mystudio.wtt;
+package com.mystudio.wtt.utils;
+
+import com.mystudio.wtt.entity.tank.Tank;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
+import com.mystudio.wtt.client.ClientStarter;
 
 public class InputHandler implements InputProcessor{
       private Tank tank;

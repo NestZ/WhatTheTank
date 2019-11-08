@@ -1,4 +1,4 @@
-package com.mystudio.wtt;
+package com.mystudio.wtt.entity.tank;
 
 import com.badlogic.gdx.Gdx;
 import org.mini2Dx.core.graphics.Graphics;
@@ -9,7 +9,7 @@ import org.mini2Dx.core.graphics.Sprite;
 /**
  * A class for player's tank
  */
-public class Tank extends Entity{
+public class Tank{
       private Key key;
       private MoveBox moveBox;
       private final int TEAM;

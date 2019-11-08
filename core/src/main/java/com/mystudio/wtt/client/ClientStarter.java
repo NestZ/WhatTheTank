@@ -1,4 +1,4 @@
-package com.mystudio.wtt;
+package com.mystudio.wtt.client;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

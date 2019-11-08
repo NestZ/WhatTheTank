@@ -5,6 +5,7 @@ import org.mini2Dx.core.game.GameContainer;
 import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.core.screen.BasicGameScreen;
 import org.mini2Dx.core.screen.ScreenManager;
+import com.mystudio.wtt.screen.Field;
 
 public class WhatTheTank extends BasicGameScreen{
   public static final String GAME_IDENTIFIER = "com.mystudio.wtt";

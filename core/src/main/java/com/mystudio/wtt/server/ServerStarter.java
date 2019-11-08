@@ -1,4 +1,4 @@
-package com.mystudio.wtt;
+package com.mystudio.wtt.server;
 
 import java.net.SocketException;
 

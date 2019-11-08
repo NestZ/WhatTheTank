@@ -2,7 +2,7 @@ package com.mystudio.wtt.desktop;
 
 import org.mini2Dx.desktop.DesktopMini2DxConfig;
 import com.badlogic.gdx.backends.lwjgl.DesktopMini2DxGame;
-import com.mystudio.wtt.GameScreenManager;
+import com.mystudio.wtt.screen.GameScreenManager;
 import com.mystudio.wtt.WhatTheTank;
 
 public class DesktopLauncher {

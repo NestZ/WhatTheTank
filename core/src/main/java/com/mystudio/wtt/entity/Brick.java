@@ -1,4 +1,4 @@
-package com.mystudio.wtt;
+package com.mystudio.wtt.entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

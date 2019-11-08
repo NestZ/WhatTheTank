@@ -1,4 +1,4 @@
-package com.mystudio.wtt;
+package com.mystudio.wtt.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -18,6 +18,7 @@ import org.mini2Dx.ui.element.Visibility;
 import org.mini2Dx.ui.event.ActionEvent;
 import org.mini2Dx.ui.listener.ActionListener;
 import org.mini2Dx.ui.style.UiTheme;
+import com.mystudio.wtt.WhatTheTank;
 
 public class Lobby extends BasicGameScreen{
       private AssetManager assetManager;

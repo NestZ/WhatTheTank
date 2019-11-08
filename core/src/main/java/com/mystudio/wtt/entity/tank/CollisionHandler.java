@@ -1,4 +1,6 @@
-package com.mystudio.wtt;
+package com.mystudio.wtt.entity.tank;
+
+import com.mystudio.wtt.entity.Wall;
 
 public class CollisionHandler{
       private Wall wall;
