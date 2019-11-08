@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.Texture;
 import org.mini2Dx.core.engine.geom.CollisionBox;
 import org.mini2Dx.core.graphics.Sprite;
 
+/**
+ * A class for player's tank
+ */
 public class Tank extends Entity{
       private Key key;
       private MoveBox moveBox;
@@ -20,6 +23,14 @@ public class Tank extends Entity{
       private int direction;
       private int ID;
 
+      /**
+       * Constructor for Tank's class
+       * @param color Tank's color
+       * @param x Tank's x position
+       * @param y Tank's y position
+       * @param team Tank's team ID
+       * @param ID Tank's ID
+       */
       public Tank(String color, float x, float y, int team, int ID){
             this.TEAM = team;
             this.MAX_HP = 3;
@@ -33,6 +44,10 @@ public class Tank extends Entity{
             this.moveBox = new MoveBox(collisionBox, 2f);
       }
 
+      /**
+       * Method for update Tank
+       * @param delta delta time since last update
+       */
       public void update(float delta){
             if(this.visible){
                   this.collisionBox.preUpdate();
@@ -40,10 +55,18 @@ public class Tank extends Entity{
             }
       }
 
+      /**
+       * Method for interpolate Tank
+       * @param alpha alpha
+       */
       public void interpolate(float alpha){
             if(this.visible)this.collisionBox.interpolate(null, alpha);
       }
 
+      /**
+       * Method for render Tank
+       * @param g Graphics to render at
+       */
       public void render(Graphics g){
             if(this.visible)g.drawSprite(this.sprite, this.collisionBox.getRenderX(), this.collisionBox.getRenderY());
       }
