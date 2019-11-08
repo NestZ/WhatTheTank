@@ -1,6 +1,7 @@
-package com.mystudio.wtt;
+package com.mystudio.wtt.screen;
 
 import org.mini2Dx.core.game.ScreenBasedGame;
+import com.mystudio.wtt.WhatTheTank;
 
 public class GameScreenManager extends ScreenBasedGame {
     @Override

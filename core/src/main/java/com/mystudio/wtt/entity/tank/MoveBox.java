@@ -1,4 +1,4 @@
-package com.mystudio.wtt;
+package com.mystudio.wtt.entity.tank;
 
 import org.mini2Dx.core.engine.geom.CollisionBox;
 

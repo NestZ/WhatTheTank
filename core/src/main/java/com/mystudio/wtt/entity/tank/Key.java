@@ -1,4 +1,4 @@
-package com.mystudio.wtt;
+package com.mystudio.wtt.entity.tank;
 
 public class Key{
       private boolean left;

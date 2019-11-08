@@ -1,4 +1,4 @@
-package com.mystudio.wtt;
+package com.mystudio.wtt.client;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.HashMap;
+import com.mystudio.wtt.entity.tank.Tank;
+import com.mystudio.wtt.utils.ParseString;
 
 public class ClientThread extends Thread {
       private boolean isRunning = true;

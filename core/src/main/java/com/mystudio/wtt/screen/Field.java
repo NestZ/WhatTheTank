@@ -1,8 +1,15 @@
-package com.mystudio.wtt;
+package com.mystudio.wtt.screen;
 
 import org.mini2Dx.core.graphics.Graphics;
 import java.util.HashMap;
 import com.badlogic.gdx.Gdx;
+import com.mystudio.wtt.server.ServerStarter;
+import com.mystudio.wtt.client.ClientStarter;
+import com.mystudio.wtt.utils.InputHandler;
+import com.mystudio.wtt.entity.tank.CollisionHandler;
+import com.mystudio.wtt.entity.tank.Tank;
+import com.mystudio.wtt.entity.Wall;
+import com.mystudio.wtt.entity.Brick;
 
 public class Field{
       private Wall wall;
