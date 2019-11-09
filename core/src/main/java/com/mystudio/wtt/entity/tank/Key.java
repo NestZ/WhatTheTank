@@ -2,6 +2,8 @@ package com.mystudio.wtt.entity.tank;
 
 /**
  * Class to store client's current key status and send to update module.
+ * 
+ * @author NestZ
  */
 
 public class Key{
