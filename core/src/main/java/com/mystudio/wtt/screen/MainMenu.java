@@ -41,7 +41,7 @@ public class MainMenu extends BasicGameScreen {
             try{
                   mainMenuContainer = Mdx.xml.fromXml(Gdx.files.internal(UI_MAINMENU_LAYOUT_XML).reader(), Container.class);
             }
-            catch(SerializationException e){  
+            catch(SerializationException e){
                   e.printStackTrace();
             }
             Objects.requireNonNull(mainMenuContainer); 

@@ -2,6 +2,7 @@ package com.mystudio.wtt.screen;
 
 import org.mini2Dx.core.graphics.Graphics;
 import java.util.HashMap;
+import java.util.Iterator;
 import com.badlogic.gdx.Gdx;
 import com.mystudio.wtt.server.ServerStarter;
 import com.mystudio.wtt.client.ClientStarter;
@@ -10,6 +11,7 @@ import com.mystudio.wtt.entity.tank.CollisionHandler;
 import com.mystudio.wtt.entity.tank.Tank;
 import com.mystudio.wtt.entity.Wall;
 import com.mystudio.wtt.entity.Brick;
+import com.mystudio.wtt.entity.Bullet;
 
 public class Field{
       private Wall wall;
@@ -17,9 +19,9 @@ public class Field{
       private CollisionHandler collisionHandler;
       private ServerStarter server;
       private ClientStarter client;
-      private HashMap<Integer, Tank> tanks;
       private int clientsNum = 0;
       private int clientID;
+      private HashMap<Integer, Tank> tanks;
 
       public Field(){
             this.wall = new Brick();
@@ -74,22 +76,45 @@ public class Field{
             Gdx.input.setInputProcessor(this.inputHandler);
             if(this.clientsNum != this.tanks.size())this.registerNewTank();
             this.setTankCollision();
-            for(int i = 0;i < this.tanks.size();i++)this.tanks.get(i).update(delta);
             this.wall.update(delta);
+            while(Bullet.noSprite.size() != 0){
+                  Bullet.noSprite.getFirst().setSprite();
+                  Bullet.noSprite.removeFirst();
+            }
+            for(int i = 0;i < this.tanks.size();i++){
+                  this.tanks.get(i).update(delta);
+                  if(Bullet.bullets.get(i) != null){
+                        Iterator<Bullet> it = Bullet.bullets.get(i).iterator();
+                        while(it.hasNext()){
+                              it.next().update(delta);
+                        }
+                  }
+            }
       }
 
       public void interpolate(float alpha){
-            try{
-                  for(int i = 0;i < this.tanks.size();i++)this.tanks.get(i).interpolate(alpha);
-                  this.wall.interpolate(alpha);
-            }
-            catch(NullPointerException e){
-                  System.out.println("ERROR ERROR ERROR ERROR ERROR ERROR");
+            this.wall.interpolate(alpha);
+            for(int i = 0;i < this.tanks.size();i++){
+                  this.tanks.get(i).interpolate(alpha);
+                  if(Bullet.bullets.get(i) != null){
+                        Iterator<Bullet> it = Bullet.bullets.get(i).iterator();
+                        while(it.hasNext()){
+                              it.next().interpolate(alpha);
+                        }
+                  }
             }
       }
 
       public void render(Graphics g){
-            for(int i = 0;i < this.tanks.size();i++)this.tanks.get(i).render(g);
             this.wall.render(g);
+            for(int i = 0;i < this.tanks.size();i++){
+                  this.tanks.get(i).render(g);
+                  if(Bullet.bullets.get(i) != null){
+                        Iterator<Bullet> it = Bullet.bullets.get(i).iterator();
+                        while(it.hasNext()){
+                              it.next().render(g);
+                        }
+                  }
+            }
       }
 }

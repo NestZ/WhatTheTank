@@ -30,7 +30,7 @@ public class Connector extends BasicGameScreen{
 
       @Override
       public void initialise(GameContainer gc){
-      FileHandleResolver fileHandleResolver = new FallbackFileHandleResolver(new ClasspathFileHandleResolver(), new InternalFileHandleResolver());
+            FileHandleResolver fileHandleResolver = new FallbackFileHandleResolver(new ClasspathFileHandleResolver(), new InternalFileHandleResolver());
             assetManager = new AssetManager(fileHandleResolver);
             assetManager.setLoader(UiTheme.class, new UiThemeLoader(fileHandleResolver));
             assetManager.load(UiTheme.DEFAULT_THEME_FILENAME, UiTheme.class);

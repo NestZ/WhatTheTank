@@ -30,7 +30,7 @@ public class Protocol{
       }
 
       /**
-       * Parse new client's information and handshaking with server
+       * Parse new client's information and handshaking with server.
        * @param dir tank's initial face direction 
        * @param x tank's initial x position
        * @param y tank's initial y position
@@ -39,5 +39,16 @@ public class Protocol{
        */
       public static String helloPackage(int dir, float x, float y){
             return "Hello" + "x" + Float.toString(x) + "y" + Float.toString(y) + ":" + Integer.toString(dir) + "\n";
+      }
+
+      /**
+       * Parse client's id and face direction while shooting.
+       * @param ID tank's id
+       * @param dir tank's face direction
+       * 
+       * @return shooting package
+       */
+      public static String shootPackage(int ID, int dir, float x, float y){
+            return "Shoot" + Integer.toString(ID) + "x" + Float.toString(x) + "y" + Float.toString(y) + ":" + Integer.toString(dir) + "\n";
       }
 }

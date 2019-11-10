@@ -70,6 +70,9 @@ public class ClientThread extends Thread {
                   else if(command.startsWith("Update")){
                         this.updateClient(command);
                   }
+                  else if(command.startsWith("Shoot")){
+                        this.clientShoot(command);
+                  }
             }
             try{
                   this.reader.close();
@@ -77,6 +80,19 @@ public class ClientThread extends Thread {
             catch(IOException e){
                   e.printStackTrace();
             }
+      }
+
+      /**
+       * Parse package and call client's shoot method.
+       * @param command package from server
+       */
+      public void clientShoot(String command){
+            int ID = ParseString.parseID(command, 5);
+            int dir = ParseString.parseDir(command);
+            float x = ParseString.parseX(command);
+            float y = ParseString.parseY(command);
+            System.out.println("Client recieve shoot ID : " + ID);
+            this.tanks.get(ID).shoot(dir, x, y);
       }
 
       /**

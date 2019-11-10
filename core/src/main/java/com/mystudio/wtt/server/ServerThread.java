@@ -94,6 +94,19 @@ public class ServerThread extends Thread {
             }
       }
 
+      public void sendShoot(int ID, int dir, float x, float y){
+            for(int i = 0;i < clients.size();i++){
+                  BufferedWriter writer = clients.get(i).getWriter();
+                  try{
+                        writer.write(Protocol.shootPackage(ID, dir, x, y));
+                        writer.flush();
+                  }
+                  catch(IOException e){
+                        e.printStackTrace();
+                  }
+            }
+      }
+
       class ServerSubThread extends Thread{
             private BufferedReader reader;
             private BufferedWriter writer;
@@ -137,7 +150,14 @@ public class ServerThread extends Thread {
                                     if(status == 0)clients.get(ID).setPos(x, y);
                                     sendUpdate(ID, moveDir, status, x, y);
                                     System.out.println("Sub - Thread " + this.threadID + " : Client requested Update");
-                                    System.out.println(command);
+                              }
+                              else if(command.startsWith("Shoot")){
+                                    int ID = ParseString.parseID(command, 5);
+                                    int dir = ParseString.parseDir(command);
+                                    float x = ParseString.parseX(command);
+                                    float y = ParseString.parseY(command);
+                                    sendShoot(ID, dir, x, y);
+                                    System.out.println("ID " + ID + " is shooting!");
                               }
                         }
                         catch(IOException e){

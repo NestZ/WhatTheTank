@@ -23,4 +23,17 @@ public class Protocol{
       public static String initPackage(int ID){
             return "InitID" + Integer.toString(ID) + "\n";
       }
+
+      /**
+       * Parse client's id and face direction while shooting.
+       * @param ID tank's id
+       * @param dir tank's face direction
+       * @param x tank's x position
+       * @param y tank's y position
+       * 
+       * @return shooting package
+       */
+      public static String shootPackage(int ID, int dir, float x, float y){
+            return "Shoot" + Integer.toString(ID) + "x" + x + "y" + y + ":" + Integer.toString(dir) + "\n";
+      }
 }

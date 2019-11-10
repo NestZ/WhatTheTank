@@ -1,6 +1,7 @@
 package com.mystudio.wtt.entity.tank;
 
 import org.mini2Dx.core.engine.geom.CollisionBox;
+import org.mini2Dx.core.graphics.Sprite;
 
 /**
  * Class to store and control tank's move box and collision box.
@@ -12,6 +13,8 @@ public class MoveBox {
       /**
        * All of tank's collision box and colliding status.
        */
+      private int direction;
+      private Sprite sprite;
       private float moveSpeed;
       private boolean RValid;
       private boolean LValid;
@@ -59,56 +62,75 @@ public class MoveBox {
       }
 
       /**
-       * Update client's move box if needed.
+       * Update client's move box and face direction if needed.
        * @param delta game's delta time
        * @param key client's key status
        * true if key pushed otherwise false
        */
       public void update(float delta, Key key){
-            if(key.up() && this.UValid()){
-                  this.moveUp(delta);
+            if(key.up()){
+                  this.sprite.setRotation(0);
+                  this.direction = 1;
+                  if(this.UValid())this.move(1, delta);
             }
-            if(key.down() && this.DValid()){
-                  this.moveDown(delta);
+            else if(key.down()){
+                  this.sprite.setRotation(180);
+                  this.direction = 2;
+                  if(this.DValid())this.move(2, delta);
             }
-            if(key.left() && this.LValid()){
-                  this.moveLeft(delta);
+            else if(key.left()){
+                  this.sprite.setRotation(-90);
+                  this.direction = 3;
+                  if(this.LValid())this.move(3, delta);
             }
-            if(key.right() && this.RValid()){
-                  this.moveRight(delta);
+            else if(key.right()){
+                  this.sprite.setRotation(90);
+                  this.direction = 4;
+                  if(this.RValid())this.move(4, delta);
             }
       }
 
       /**
-       * Move client's tank to left (calculate with deltatime and speed).
-       * @param delta game's delta time
+       * Move client's tank to given direction.
+       * @param dir tank's move direction
+       * 1 : move up
+       * 2 : move down
+       * 3 : move left
+       * 4 : move right
+       * @param delta delta time
        */
-      public void moveLeft(float delta){
-            this.collisionBox.set(this.collisionBox.getX() - (this.moveSpeed * delta * 100), this.collisionBox.getY());
+      public void move(int dir, float delta){
+            float absSpeed = this.moveSpeed * delta * 100;
+            switch(dir){
+                  case 1 :
+                        this.collisionBox.set(this.collisionBox.getX(), this.collisionBox.getY() - absSpeed);
+                        break;
+                  case 2 :
+                        this.collisionBox.set(this.collisionBox.getX(), this.collisionBox.getY() + absSpeed);
+                        break;
+                  case 3 :
+                        this.collisionBox.set(this.collisionBox.getX() - absSpeed, this.collisionBox.getY());
+                        break;
+                  case 4 :
+                        this.collisionBox.set(this.collisionBox.getX() + absSpeed, this.collisionBox.getY());
+                        break;
+            }
       }
 
       /**
-       * Move client's tank to right (calculate with deltatime and speed).
-       * @param delta game's delta time
+       * Setter for sprite.
+       * @param sprite tank's sprite
        */
-      public void moveRight(float delta){
-            this.collisionBox.set(this.collisionBox.getX() + (this.moveSpeed * delta * 100), this.collisionBox.getY());
+      public void sprite(Sprite sprite){
+            this.sprite = sprite;
       }
 
-      /**
-       * Move client's tank up (calculate with deltatime and speed).
-       * @param delta game's delta time
-       */
-      public void moveUp(float delta){
-            this.collisionBox.set(this.collisionBox.getX(), this.collisionBox.getY() - (this.moveSpeed * delta * 100));
+      public int direction(){
+            return this.direction;
       }
 
-      /**
-       * Move client's tank down (calculate with deltatime and speed).
-       * @param delta game's delta time
-       */
-      public void moveDown(float delta){
-            this.collisionBox.set(this.collisionBox.getX(), this.collisionBox.getY() + (this.moveSpeed * delta * 100));
+      public void direction(int dir){
+            this.direction = dir;
       }
 
       /**

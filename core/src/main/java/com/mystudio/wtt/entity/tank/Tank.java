@@ -3,6 +3,7 @@ package com.mystudio.wtt.entity.tank;
 import com.badlogic.gdx.Gdx;
 import org.mini2Dx.core.graphics.Graphics;
 import com.badlogic.gdx.graphics.Texture;
+import com.mystudio.wtt.entity.Bullet;
 import org.mini2Dx.core.engine.geom.CollisionBox;
 import org.mini2Dx.core.graphics.Sprite;
 
@@ -28,7 +29,6 @@ public class Tank{
       private int hp;
       private CollisionBox collisionBox;
       private Sprite sprite;
-      private int direction;
 
       /**
        * Constructor for Tank's class.
@@ -48,11 +48,11 @@ public class Tank{
             this.ID = ID;
             this.key = new Key();
             this.collisionBox = new CollisionBox(x, y, 0, 0);
-            this.moveBox = new MoveBox(collisionBox, 2f);
+            this.moveBox = new MoveBox(collisionBox, 3f);
       }
 
       /**
-       * Method for update Tank's position.
+       * Main method for update Tank's position and sprite.
        * @param delta delta time since last update
        */
       public void update(float delta){
@@ -76,6 +76,20 @@ public class Tank{
        */
       public void render(Graphics g){
             if(this.visible)g.drawSprite(this.sprite, this.collisionBox.getRenderX(), this.collisionBox.getRenderY());
+      }
+
+      /**
+       * Created and set bullet position, direction.
+       * @param dir tank's face direction
+       * 1 : face up
+       * 2 : face down
+       * 3 : face left
+       * 4 : face right
+       * @param x bullet's initial x position
+       * @param y bullet's initial y position
+       */
+      public void shoot(int dir, float x, float y){
+            Bullet.addBullet(this.ID, dir, x, y);
       }
 
       /**
@@ -114,14 +128,16 @@ public class Tank{
        */
       public void setPos(float x, float y, int dir){
             this.collisionBox.set(x,y);
-            this.direction = dir;
+            this.moveBox.direction(dir);
       }
 
       /**
        * Set tank's sprite when tank's is created.
+       * Initial sprite direction is face up.
        */
       public void setSprite(){
             this.sprite = new Sprite(new Texture(Gdx.files.internal("tank.png")));
+            this.moveBox.sprite(this.sprite);
             this.collisionBox.setWidth(this.sprite.getWidth());
             this.collisionBox.setHeight(this.sprite.getHeight());
             this.visible = true;
@@ -152,7 +168,7 @@ public class Tank{
        * 4 : face right
        */
       public int getDir(){
-            return this.direction;
+            return this.moveBox.direction();
       }
 
       /**

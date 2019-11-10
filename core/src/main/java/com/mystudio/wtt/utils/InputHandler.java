@@ -1,7 +1,6 @@
 package com.mystudio.wtt.utils;
 
 import com.mystudio.wtt.entity.tank.Tank;
-
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
 import com.mystudio.wtt.client.ClientStarter;
@@ -17,8 +16,13 @@ public class InputHandler implements InputProcessor{
             this.client = client;
       }
 
-      public void sendToServer(char moveDir, int status){
+      public void sendMove(char moveDir, int status){
             this.client.sendToServer(Protocol.updatePackage(moveDir, status, this.tank.getID(), this.tank.getX(), this.tank.getY()));
+      }
+
+      public void sendShoot(){
+            this.client.sendToServer(Protocol.shootPackage(this.tank.getID(), this.tank.getDir(),
+                                    this.tank.getX() + this.tank.getWidth() / 2, this.tank.getY() + this.tank.getHeight() / 2));
       }
       
       @Override
@@ -26,16 +30,19 @@ public class InputHandler implements InputProcessor{
             this.keyDown = true;
             switch(keycode){
                   case Keys.UP :
-                        this.sendToServer('u', 1);
+                        this.sendMove('u', 1);
                         break;
                   case Keys.DOWN :
-                        this.sendToServer('d', 1);
+                        this.sendMove('d', 1);
                         break;
                   case Keys.LEFT :
-                        this.sendToServer('l', 1);
+                        this.sendMove('l', 1);
                         break;
                   case Keys.RIGHT :
-                        this.sendToServer('r', 1);
+                        this.sendMove('r', 1);
+                        break;
+                  case Keys.SPACE :
+                        this.sendShoot();
                         break;
             }
             return false;
@@ -46,16 +53,16 @@ public class InputHandler implements InputProcessor{
             this.keyDown = false;
             switch(keycode){
                   case Keys.UP :
-                        this.sendToServer('u', 0);
+                        this.sendMove('u', 0);
                         break;
                   case Keys.DOWN :
-                        this.sendToServer('d', 0);
+                        this.sendMove('d', 0);
                         break;
                   case Keys.LEFT :
-                        this.sendToServer('l', 0);
+                        this.sendMove('l', 0);
                         break;
                   case Keys.RIGHT :
-                        this.sendToServer('r', 0);
+                        this.sendMove('r', 0);
                         break;
             }
             return false;
