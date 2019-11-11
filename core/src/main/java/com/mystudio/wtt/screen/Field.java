@@ -33,6 +33,7 @@ public class Field{
             this.tanks = this.client.thread().getTanks();
             this.inputHandler = new InputHandler(this.tanks.get(this.clientID), this.client);
             this.setCollision();
+            this.addExitListener();
       }
 
       public void setCollision(){
@@ -72,6 +73,14 @@ public class Field{
             }
       }
 
+      public void addExitListener(){
+            Runtime.getRuntime().addShutdownHook(new Thread(){
+                  public void run(){
+                       System.out.println("What the fuck why are u closing me");
+                  }
+            });
+      }
+
       public void update(float delta){
             Gdx.input.setInputProcessor(this.inputHandler);
             if(this.clientsNum != this.tanks.size())this.registerNewTank();
@@ -83,11 +92,9 @@ public class Field{
             }
             for(int i = 0;i < this.tanks.size();i++){
                   this.tanks.get(i).update(delta);
-                  if(Bullet.bullets.get(i) != null){
-                        Iterator<Bullet> it = Bullet.bullets.get(i).iterator();
-                        while(it.hasNext()){
-                              it.next().update(delta);
-                        }
+                  Iterator<Integer> it = Bullet.bulletss.keySet().iterator();
+                  while(it.hasNext()){
+                        Bullet.bulletss.get(it.next()).update(delta);
                   }
             }
       }
@@ -96,11 +103,9 @@ public class Field{
             this.wall.interpolate(alpha);
             for(int i = 0;i < this.tanks.size();i++){
                   this.tanks.get(i).interpolate(alpha);
-                  if(Bullet.bullets.get(i) != null){
-                        Iterator<Bullet> it = Bullet.bullets.get(i).iterator();
-                        while(it.hasNext()){
-                              it.next().interpolate(alpha);
-                        }
+                  Iterator<Integer> it = Bullet.bulletss.keySet().iterator();
+                  while(it.hasNext()){
+                        Bullet.bulletss.get(it.next()).interpolate(alpha);
                   }
             }
       }
@@ -109,11 +114,9 @@ public class Field{
             this.wall.render(g);
             for(int i = 0;i < this.tanks.size();i++){
                   this.tanks.get(i).render(g);
-                  if(Bullet.bullets.get(i) != null){
-                        Iterator<Bullet> it = Bullet.bullets.get(i).iterator();
-                        while(it.hasNext()){
-                              it.next().render(g);
-                        }
+                  Iterator<Integer> it = Bullet.bulletss.keySet().iterator();
+                  while(it.hasNext()){
+                        Bullet.bulletss.get(it.next()).render(g);
                   }
             }
       }

@@ -14,11 +14,10 @@ public class Protocol{
       private Protocol(){}
       
       /**
-       * Parse client's new information and send to server.
+       * Packaging client's new information and send to server.
        * @param moveDir current tank's face direction
        * @param status current client's key status
        * (true if key down otherwise false)
-       * 
        * @param ID client's id
        * @param x current tank's x position
        * @param y current tank's y position
@@ -30,7 +29,7 @@ public class Protocol{
       }
 
       /**
-       * Parse new client's information and handshaking with server.
+       * Packaging new client's information and handshaking with server.
        * @param dir tank's initial face direction 
        * @param x tank's initial x position
        * @param y tank's initial y position
@@ -42,7 +41,7 @@ public class Protocol{
       }
 
       /**
-       * Parse client's id and face direction while shooting.
+       * Packaging client's id and face direction while shooting.
        * @param ID tank's id
        * @param dir tank's face direction
        * 

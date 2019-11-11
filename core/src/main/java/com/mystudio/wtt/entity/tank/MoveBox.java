@@ -1,5 +1,6 @@
 package com.mystudio.wtt.entity.tank;
 
+import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.core.engine.geom.CollisionBox;
 import org.mini2Dx.core.graphics.Sprite;
 
@@ -68,6 +69,7 @@ public class MoveBox {
        * true if key pushed otherwise false
        */
       public void update(float delta, Key key){
+            this.collisionBox.preUpdate();
             if(key.up()){
                   this.sprite.setRotation(0);
                   this.direction = 1;
@@ -88,6 +90,22 @@ public class MoveBox {
                   this.direction = 4;
                   if(this.RValid())this.move(4, delta);
             }
+      }
+
+      /**
+       * Method for interpolate previous and next frame.
+       * @param alpha delta time since last render
+       */
+      public void interpolate(float alpha){
+            this.collisionBox.interpolate(null, alpha);
+      }
+
+      /**
+       * Method for render Tank's sprite at current position.
+       * @param g Graphics to render at
+       */
+      public void render(Graphics g){
+            g.drawSprite(this.sprite, this.collisionBox.getRenderX(), this.collisionBox.getRenderY());
       }
 
       /**
@@ -125,10 +143,34 @@ public class MoveBox {
             this.sprite = sprite;
       }
 
+      /**
+       * Getter for tank's collision box.
+       * @return tank's collision box
+       */
+      public CollisionBox collisionBox(){
+            return this.collisionBox;
+      }
+
+      /**
+       * Getter for tank's face direction.
+       * @return tank's face direction
+       * 1 : face up
+       * 2 : face down
+       * 3 : face left
+       * 4 : face right
+       */
       public int direction(){
             return this.direction;
       }
 
+      /**
+       * Setter for tank's face direction.
+       * @param dir tank's face direction
+       * 1 : face up
+       * 2 : face down
+       * 3 : face left
+       * 4 : face right
+       */
       public void direction(int dir){
             this.direction = dir;
       }

@@ -1,8 +1,6 @@
 package com.mystudio.wtt.entity;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.LinkedList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,27 +11,26 @@ import org.mini2Dx.core.graphics.Graphics;
 public class Bullet{
       private Sprite sprite;
       private int dir;
+      private int TEAM;
       private float speed;
       private CollisionBox collisionBox;
       private float x;
       private float y;
-      public static HashMap<Integer, List<Bullet>> bullets = new HashMap<>();
+      private static int bulletNum = 0;
+      public static ConcurrentHashMap<Integer, Bullet> bulletss = new ConcurrentHashMap<>();
       public static LinkedList<Bullet> noSprite = new LinkedList<>();
 
-      public Bullet(float x, float y, int dir){
+      public Bullet(float x, float y, int dir, int TEAM){
             this.dir = dir;
-            this.speed = 15f;
+            this.TEAM = TEAM;
+            this.speed = 20f;
             this.x = x;
             this.y = y;
             noSprite.add(this);
       }
 
-      public static void addBullet(int tankID, int dir, float x, float y){
-            List<Bullet> s;
-            if(bullets.get(tankID) == null)s = new CopyOnWriteArrayList<>();
-            else s = bullets.get(tankID);
-            s.add(new Bullet(x, y, dir));
-            bullets.put(tankID, s);
+      public static void addBullet(int TEAM, int dir, float x, float y){
+            bulletss.put(bulletNum++, new Bullet(x, y, dir, TEAM));
       }
 
       public void setSprite(){
@@ -72,5 +69,9 @@ public class Bullet{
             if(this.sprite != null){
                   g.drawSprite(this.sprite, this.collisionBox.getRenderX(), this.collisionBox.getRenderY());
             }
+      }
+
+      public int TEAM(){
+            return this.TEAM;
       }
 }

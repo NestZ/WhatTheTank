@@ -24,8 +24,8 @@ public class Connector extends BasicGameScreen{
       private AssetManager assetManager;
       private UiContainer uiContainer;
       public final static int ID = 2;
-      private Visibility v = Visibility.VISIBLE ;
-      private Visibility h = Visibility.HIDDEN ;
+      private Visibility v = Visibility.VISIBLE;
+      private Visibility h = Visibility.HIDDEN;
       private int screenToLoad = 0;
 
       @Override

@@ -16,7 +16,7 @@ import org.mini2Dx.core.graphics.Sprite;
 public class Tank{
       /**
        * Tank's information.
-       * Final fields are permanently initialize by constructor. 
+       * Final fields are permanently initialize by constructor.
        */
       private final int TEAM;
       private final int MAX_HP;
@@ -27,7 +27,6 @@ public class Tank{
       private boolean isDead;
       private boolean visible;
       private int hp;
-      private CollisionBox collisionBox;
       private Sprite sprite;
 
       /**
@@ -47,8 +46,7 @@ public class Tank{
             this.visible = false;
             this.ID = ID;
             this.key = new Key();
-            this.collisionBox = new CollisionBox(x, y, 0, 0);
-            this.moveBox = new MoveBox(collisionBox, 3f);
+            this.moveBox = new MoveBox(new CollisionBox(x, y, 0, 0), 3f);
       }
 
       /**
@@ -57,7 +55,6 @@ public class Tank{
        */
       public void update(float delta){
             if(this.visible){
-                  this.collisionBox.preUpdate();
                   this.moveBox.update(delta, this.key);
             }
       }
@@ -67,7 +64,9 @@ public class Tank{
        * @param alpha delta time since last render
        */
       public void interpolate(float alpha){
-            if(this.visible)this.collisionBox.interpolate(null, alpha);
+            if(this.visible){
+                  this.moveBox.interpolate(alpha);
+            }
       }
 
       /**
@@ -75,7 +74,9 @@ public class Tank{
        * @param g Graphics to render at
        */
       public void render(Graphics g){
-            if(this.visible)g.drawSprite(this.sprite, this.collisionBox.getRenderX(), this.collisionBox.getRenderY());
+            if(this.visible){
+                  this.moveBox.render(g);
+            }
       }
 
       /**
@@ -89,7 +90,7 @@ public class Tank{
        * @param y bullet's initial y position
        */
       public void shoot(int dir, float x, float y){
-            Bullet.addBullet(this.ID, dir, x, y);
+            Bullet.addBullet(this.TEAM, dir, x, y);
       }
 
       /**
@@ -97,7 +98,7 @@ public class Tank{
        * @return tank's collision box
        */
       public CollisionBox CollisionBox(){
-            return this.collisionBox;
+            return this.moveBox.collisionBox();
       }
 
       /**
@@ -127,7 +128,7 @@ public class Tank{
        * 4 : face right
        */
       public void setPos(float x, float y, int dir){
-            this.collisionBox.set(x,y);
+            this.moveBox.collisionBox().set(x,y);
             this.moveBox.direction(dir);
       }
 
@@ -138,8 +139,8 @@ public class Tank{
       public void setSprite(){
             this.sprite = new Sprite(new Texture(Gdx.files.internal("tank.png")));
             this.moveBox.sprite(this.sprite);
-            this.collisionBox.setWidth(this.sprite.getWidth());
-            this.collisionBox.setHeight(this.sprite.getHeight());
+            this.moveBox.collisionBox().setWidth(this.sprite.getWidth());
+            this.moveBox.collisionBox().setHeight(this.sprite.getHeight());
             this.visible = true;
       }
 
@@ -176,7 +177,7 @@ public class Tank{
        * @return tank's x position
        */
       public float getX(){
-            return this.collisionBox.getRenderX();
+            return this.moveBox.collisionBox().getRenderX();
       }
 
       /**
@@ -184,7 +185,7 @@ public class Tank{
        * @return tank's y direction
        */
       public float getY(){
-            return this.collisionBox.getRenderY();
+            return this.moveBox.collisionBox().getRenderY();
       }
 
       /**

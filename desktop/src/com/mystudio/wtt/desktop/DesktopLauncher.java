@@ -8,7 +8,7 @@ import com.mystudio.wtt.WhatTheTank;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		DesktopMini2DxConfig config = new DesktopMini2DxConfig(WhatTheTank.GAME_IDENTIFIER);
-		//config.vSyncEnabled = true;
+		config.vSyncEnabled = true;
 		//config.height = 1080;
 		//config.width = 1920;
 		//config.fullscreen = true;
