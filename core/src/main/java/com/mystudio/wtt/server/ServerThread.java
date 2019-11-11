@@ -11,11 +11,11 @@ import java.net.SocketException;
 import java.util.HashMap;
 import com.mystudio.wtt.utils.ParseString;
 
-public class ServerThread extends Thread {
+public class ServerThread extends Thread{
       private HashMap<Integer, ClientInfo> clients;
       private boolean isRunning = true;
       private ServerSocket serverSocket;
-      private int serverPort = 1234;
+      private int serverPort = 64740;
 
       public ServerThread() throws SocketException{
             this.clients = new HashMap<>();

@@ -1,10 +1,11 @@
 package com.mystudio.wtt.screen;
 
 import org.mini2Dx.core.graphics.Graphics;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import com.badlogic.gdx.Gdx;
-import com.mystudio.wtt.server.ServerStarter;
 import com.mystudio.wtt.client.ClientStarter;
 import com.mystudio.wtt.utils.InputHandler;
 import com.mystudio.wtt.entity.tank.CollisionHandler;
@@ -17,7 +18,6 @@ public class Field{
       private Wall wall;
       private InputHandler inputHandler;
       private CollisionHandler collisionHandler;
-      private ServerStarter server;
       private ClientStarter client;
       private int clientsNum = 0;
       private int clientID;
@@ -26,11 +26,15 @@ public class Field{
       public Field(){
             this.wall = new Brick();
             this.collisionHandler = new CollisionHandler();
-            this.server = new ServerStarter();
-            this.client = new ClientStarter("127.0.0.1", 1234, 0, 0, 0);
-            while(!ClientStarter.isReady());
-            this.clientID = this.client.thread().getID();
-            this.tanks = this.client.thread().getTanks();
+            // try{
+            //       this.client = new ClientStarter("127.0.0.1");
+            // }
+            // catch(IOException e){
+            //       e.printStackTrace();
+            // }
+            // while(!ClientStarter.isReady());
+            // this.clientID = this.client.thread().getID();
+            // this.tanks = this.client.thread().getTanks();
             this.inputHandler = new InputHandler(this.tanks.get(this.clientID), this.client);
             this.setCollision();
             this.addExitListener();

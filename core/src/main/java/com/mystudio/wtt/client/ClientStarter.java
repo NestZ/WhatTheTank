@@ -22,32 +22,29 @@ public class ClientStarter {
 
       /**
        * Constructor to initialize fields and make handshaking with server.
-       * @param hostName set hostname (or IP).
-       * @param serverPort set serverPort to connect.
-       * @param x client's initial x position.
-       * @param y client's initial y position.
-       * @param dir client's initial face direction.
+       * @param hostName set hostname (or IP)
+       * @param serverPort set serverPort to connect
+       * @param x client's initial x position
+       * @param y client's initial y position
+       * @param dir client's initial face direction
+       * 
+       * @throws IOException can not connect to server
        */
-      public ClientStarter(String hostName, int serverPort, float x, float y, int dir){
+      public ClientStarter(String hostName)throws IOException{
+            this.clientSocket = new Socket(hostName, 64740);
+            writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
             try{
-                  this.clientSocket = new Socket(hostName, serverPort);
-                  writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-                  try{
-                        Thread.sleep(100);
-                        writer.write(Protocol.helloPackage(dir, x, y));
-                        writer.flush();
-                        Thread.sleep(500);
-                  }
-                  catch(InterruptedException e){
-                        e.printStackTrace();
-                  }
-                  this.thread = new ClientThread(this.clientSocket);
-                  this.thread.start();
-                  this.thread.addToMap("c", x, y, dir, this.thread.getID());
+                  Thread.sleep(100);
+                  writer.write(Protocol.helloPackage(0, 0, 0));
+                  writer.flush();
+                  Thread.sleep(500);
             }
-            catch(IOException e){
+            catch(InterruptedException e){
                   e.printStackTrace();
             }
+            this.thread = new ClientThread(this.clientSocket);
+            this.thread.start();
+            this.thread.addToMap("c", 0, 0, 0, this.thread.getID());
       }
 
       /**

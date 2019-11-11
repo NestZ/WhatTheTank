@@ -7,8 +7,10 @@ public class GameScreenManager extends ScreenBasedGame{
     @Override
     public void initialise(){
         addScreen(new MainMenu());
-        addScreen(new Connector());
+        addScreen(new SelectRole());
         addScreen(new WhatTheTank());
+        addScreen(new Connector());
+        addScreen(new Lobby());
     }
 
     @Override

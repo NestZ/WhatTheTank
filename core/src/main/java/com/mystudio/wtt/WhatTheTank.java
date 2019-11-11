@@ -9,14 +9,14 @@ import com.mystudio.wtt.screen.Field;
 
 public class WhatTheTank extends BasicGameScreen{
   public static final String GAME_IDENTIFIER = "com.mystudio.wtt";
-  public final static int ID = 3;
+  public final static int ID = 4;
   private Texture texture;
   private Field field;
   
   @Override
   public void initialise(GameContainer gc){
     texture = new Texture("mini2Dx.png");
-    field = new Field();
+    //field = new Field();
   }
 
   @Override
