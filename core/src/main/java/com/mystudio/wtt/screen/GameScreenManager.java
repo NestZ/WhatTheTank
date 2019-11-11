@@ -9,10 +9,11 @@ public class GameScreenManager extends ScreenBasedGame {
         addScreen(new MainMenu());
         addScreen(new Lobby());
         addScreen(new WhatTheTank());
+        addScreen(new Lobby1());
     }
 
     @Override
     public int getInitialScreenId(){
-        return MainMenu.ID;
+        return MainMenu.ID ;
     }
 }
