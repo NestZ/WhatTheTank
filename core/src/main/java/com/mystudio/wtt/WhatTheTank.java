@@ -1,22 +1,32 @@
 package com.mystudio.wtt;
 
-import com.badlogic.gdx.graphics.Texture;
+import java.io.IOException;
+import java.util.HashMap;
 import org.mini2Dx.core.game.GameContainer;
 import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.core.screen.BasicGameScreen;
 import org.mini2Dx.core.screen.ScreenManager;
+import com.mystudio.wtt.entity.tank.Tank;
 import com.mystudio.wtt.screen.Field;
 
 public class WhatTheTank extends BasicGameScreen{
-  public static final String GAME_IDENTIFIER = "com.mystudio.wtt";
-  public final static int ID = 3;
-  private Texture texture;
-  private Field field;
+  public final static int ID = 5;
+  public static int clientID;
+  public static HashMap<Integer, Tank> tanks;
+  private static Field field;
+
+  public static void initField(){
+    try{
+      field = new Field(WhatTheTank.tanks);
+    }
+    catch(IOException e){
+      e.printStackTrace();
+    }
+  }
   
   @Override
   public void initialise(GameContainer gc){
-    texture = new Texture("mini2Dx.png");
-    field = new Field();
+
   }
 
   @Override
@@ -31,7 +41,6 @@ public class WhatTheTank extends BasicGameScreen{
 
   @Override
   public void render(GameContainer gc, Graphics g){
-    g.drawTexture(texture, 100f, 100f);
     field.render(g);
   }
 

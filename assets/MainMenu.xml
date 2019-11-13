@@ -12,7 +12,6 @@
                         <value class="org.mini2Dx.ui.element.Label">
                             <visibility>VISIBLE</visibility>
                             <text>Play</text>
-                            
                         </value>
                     </children>
                 </value>
