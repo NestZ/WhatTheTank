@@ -96,9 +96,9 @@ public class Field{
             }
             for(int i = 0;i < this.tanks.size();i++){
                   this.tanks.get(i).update(delta);
-                  Iterator<Integer> it = Bullet.bulletss.keySet().iterator();
+                  Iterator<Integer> it = Bullet.bullets.keySet().iterator();
                   while(it.hasNext()){
-                        Bullet.bulletss.get(it.next()).update(delta);
+                        Bullet.bullets.get(it.next()).update(delta);
                   }
             }
       }
@@ -107,9 +107,9 @@ public class Field{
             this.wall.interpolate(alpha);
             for(int i = 0;i < this.tanks.size();i++){
                   this.tanks.get(i).interpolate(alpha);
-                  Iterator<Integer> it = Bullet.bulletss.keySet().iterator();
+                  Iterator<Integer> it = Bullet.bullets.keySet().iterator();
                   while(it.hasNext()){
-                        Bullet.bulletss.get(it.next()).interpolate(alpha);
+                        Bullet.bullets.get(it.next()).interpolate(alpha);
                   }
             }
       }
@@ -118,9 +118,9 @@ public class Field{
             this.wall.render(g);
             for(int i = 0;i < this.tanks.size();i++){
                   this.tanks.get(i).render(g);
-                  Iterator<Integer> it = Bullet.bulletss.keySet().iterator();
+                  Iterator<Integer> it = Bullet.bullets.keySet().iterator();
                   while(it.hasNext()){
-                        Bullet.bulletss.get(it.next()).render(g);
+                        Bullet.bullets.get(it.next()).render(g);
                   }
             }
       }

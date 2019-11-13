@@ -32,18 +32,11 @@ public class Protocol{
       /**
        * Packaging new client's information into string.
        * @param ID new client's ID
-       * @param dir new client's face direction
-       * 1 : face up
-       * 2 : face down
-       * 3 : face left
-       * 4 : face right
-       * @param x new client's initial x position
-       * @param y new client's initial y position
        * 
        * @return string that include new client's information
        */
-      public static String registerPackage(int ID, int dir, float x, float y){
-            return "REG" + Integer.toString(ID) + "x" + Float.toString(x) + "y" + Float.toString(y) + ":" + Integer.toString(dir) + "\n";
+      public static String registerPackage(int ID, int team, String name){
+            return "REG" + Integer.toString(ID) + Integer.toString(team) + name + ":\n";
       }
 
       /**
@@ -60,19 +53,11 @@ public class Protocol{
        * Packaging each client package into string.
        * @param index index of current package
        * @param ID current packaging client's ID
-       * @param dir current packaging client's face direction
-       * 1 : face up
-       * 2 : face down
-       * 3 : face left
-       * 4 : face right
-       * @param x current packaging client's x position
-       * @param y current packaging client's y position
        * 
        * @return string that include information of each client
        */
-      public static String getPackage(int index, int ID, int dir, float x, float y){
-            return "GET" + Integer.toString(index) + Integer.toString(ID) + "x" + Float.toString(x) +
-                  "y" + Float.toString(y) + ":" + Integer.toString(dir) + "\n";
+      public static String getPackage(int index, int ID, int team, String name){
+            return "GET" + Integer.toString(index) + Integer.toString(ID) + Integer.toString(team) + name + ":\n";
       }
 
       /**
@@ -81,8 +66,8 @@ public class Protocol{
        * 
        * @return string that include new client's ID
        */
-      public static String initPackage(int ID){
-            return "InitID" + Integer.toString(ID) + "\n";
+      public static String initPackage(int team, int ID, String name){
+            return "Init" + Integer.toString(ID) + Integer.toString(team) + name + ":\n";
       }
 
       /**

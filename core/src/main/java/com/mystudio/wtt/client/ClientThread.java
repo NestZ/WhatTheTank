@@ -18,14 +18,15 @@ import com.mystudio.wtt.utils.ParseString;
  * @author NestZ
  */
 
-public class ClientThread extends Thread {
+public class ClientThread extends Thread{
       /**
        * Field to store thread info (also client's cache data);
        */
       private boolean isRunning = true;
       private BufferedReader reader;
-      private int clientID;
+      public static int clientID = -1;
       private HashMap<Integer, Tank> tanks;
+      public static int team = -1;
       
       /**
        * Constructor to set socket to connect.
@@ -58,8 +59,8 @@ public class ClientThread extends Thread {
                         e.printStackTrace();
                   }
                   if(command.startsWith("InitID")){
-                        this.setID(command);
-                        ClientStarter.isReady(true);
+                        this.setInit(command);
+                        //ClientStarter.isReady(true);
                   }
                   else if(command.startsWith("GETS")){
                         this.setOtherClient(command);
@@ -137,10 +138,10 @@ public class ClientThread extends Thread {
                   }
                   if(command.startsWith("GET" + i)){
                         int ID = ParseString.parseID(command, 4);
-                        int dir = ParseString.parseDir(command);
-                        float x = ParseString.parseX(command);
-                        float y = ParseString.parseY(command);
-                        this.addToMap("c", x, y, dir, ID);
+                        // int dir = ParseString.parseDir(command);
+                        // float x = ParseString.parseX(command);
+                        // float y = ParseString.parseY(command);
+                        //this.addToMap("c", x, y, dir, ID);
                   }
             }
       }
@@ -149,16 +150,9 @@ public class ClientThread extends Thread {
        * Parse package and set current client id.
        * @param command package from server
        */
-      public void setID(String command){
-            int ID = ParseString.parseID(command, 6);
-            this.clientID = ID;
-      }
-
-      /**
-       * Return current client's id.
-       */
-      public int getID(){
-            return this.clientID;
+      public void setInit(String command){
+            clientID = ParseString.parseID(command, 4);
+            team = ParseString.parseID(command, 5);
       }
 
       /**

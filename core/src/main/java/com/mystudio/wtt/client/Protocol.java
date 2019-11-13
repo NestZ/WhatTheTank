@@ -36,8 +36,8 @@ public class Protocol{
        * 
        * @return package that ready to used to handshaking
        */
-      public static String helloPackage(int dir, float x, float y){
-            return "Hello" + "x" + Float.toString(x) + "y" + Float.toString(y) + ":" + Integer.toString(dir) + "\n";
+      public static String helloPackage(String name){
+            return "Hello" + name + ":\n";
       }
 
       /**

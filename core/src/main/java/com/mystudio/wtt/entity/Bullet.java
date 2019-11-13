@@ -17,7 +17,7 @@ public class Bullet{
       private float x;
       private float y;
       private static int bulletNum = 0;
-      public static ConcurrentHashMap<Integer, Bullet> bulletss = new ConcurrentHashMap<>();
+      public static ConcurrentHashMap<Integer, Bullet> bullets = new ConcurrentHashMap<>();
       public static LinkedList<Bullet> noSprite = new LinkedList<>();
 
       public Bullet(float x, float y, int dir, int TEAM){
@@ -26,11 +26,11 @@ public class Bullet{
             this.speed = 20f;
             this.x = x;
             this.y = y;
-            noSprite.add(this);
+            Bullet.noSprite.add(this);
       }
 
       public static void addBullet(int TEAM, int dir, float x, float y){
-            bulletss.put(bulletNum++, new Bullet(x, y, dir, TEAM));
+            Bullet.bullets.put(Bullet.bulletNum++, new Bullet(x, y, dir, TEAM));
       }
 
       public void setSprite(){

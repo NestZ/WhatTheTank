@@ -9,7 +9,7 @@ import com.mystudio.wtt.screen.Field;
 
 public class WhatTheTank extends BasicGameScreen{
   public static final String GAME_IDENTIFIER = "com.mystudio.wtt";
-  public final static int ID = 4;
+  public final static int ID = 5;
   private Texture texture;
   private Field field;
   

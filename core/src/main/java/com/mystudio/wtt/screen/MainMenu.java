@@ -7,7 +7,7 @@ import org.mini2Dx.ui.event.ActionEvent;
 import org.mini2Dx.ui.listener.ActionListener;
 
 public class MainMenu extends Screen {
-      public final static int ID = 1;
+      public final static int ID = 0;
 
       @Override
       public void initialise(GameContainer gc){
@@ -28,7 +28,7 @@ public class MainMenu extends Screen {
 
                   @Override
                   public void onActionEnd(ActionEvent event){
-                        screenToLoad = SelectRole.ID;
+                        screenToLoad = EnterName.ID;
                   }
             });
             quitButton.addActionListener(new ActionListener(){
