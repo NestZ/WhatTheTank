@@ -74,7 +74,6 @@ public class ServerThread extends Thread{
       public void sendRegister(int ID, int team, String name){
             for(int i = 0;i < clients.size();i++){
                   if(i != ID){
-                        System.out.println("Send to id : " + i);
                         BufferedWriter writer = clients.get(i).getWriter();
                         try{
                               writer.write(Protocol.registerPackage(ID, team, name));
@@ -150,9 +149,6 @@ public class ServerThread extends Thread{
                                           team = 2;
                                           redTeam++;
                                     }
-                                    // float x = ParseString.parseX(command);
-                                    // float y = ParseString.parseY(command);
-                                    // int dir = ParseString.parseDir(command);
                                     clients.put(ID, new ClientInfo(this.writer, team, ID, name));
                                     this.writer.write(Protocol.initPackage(team, ID, name));
                                     this.writer.flush();

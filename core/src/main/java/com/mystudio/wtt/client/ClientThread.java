@@ -120,7 +120,7 @@ public class ClientThread extends Thread{
             int dir = ParseString.parseDir(command);
             float x = ParseString.parseX(command);
             float y = ParseString.parseY(command);
-            this.addToMap("c", x, y, dir, ID);
+            this.addToMap(x, y, dir, ID);
       }
 
       /**
@@ -189,7 +189,7 @@ public class ClientThread extends Thread{
        * @param dir tank's initial face direction
        * @param ID set tank's ID
        */
-      public void addToMap(String color, float x, float y, int dir, int ID){
-            if(!this.tanks.containsKey(ID))this.tanks.put(ID, new Tank(color, x, y, dir, ID));
+      public void addToMap(float x, float y, int dir, int ID){
+            //if(!this.tanks.containsKey(ID))this.tanks.put(ID, new Tank(x, y, dir, ID));
       }
 }

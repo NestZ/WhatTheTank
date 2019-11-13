@@ -36,6 +36,7 @@ public class SelectRole extends Screen{
                               new ServerThread().start();
                               try{
                                     new ClientStarter("127.0.0.1").start();
+                                    Lobby.isHost = true;
                                     screenToLoad = Lobby.ID;
                               }
                               catch(IOException e){
@@ -55,6 +56,7 @@ public class SelectRole extends Screen{
 
                   @Override
                   public void onActionEnd(ActionEvent event){
+                        Lobby.isHost = false;
                         screenToLoad = Connector.ID;
                   }
             });

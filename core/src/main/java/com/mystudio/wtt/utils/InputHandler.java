@@ -20,7 +20,6 @@ public class InputHandler implements InputProcessor{
        * Store controlling tank and key status.
        */
       private Tank tank;
-      private ClientStarter client;
       public boolean keyDown = false;
       
       /**
@@ -28,9 +27,8 @@ public class InputHandler implements InputProcessor{
        * @param tank controlling tank
        * @param client current client
        */
-      public InputHandler(Tank tank, ClientStarter client){
+      public InputHandler(Tank tank){
             this.tank = tank;
-            this.client = client;
       }
 
       /**
@@ -41,14 +39,14 @@ public class InputHandler implements InputProcessor{
        * 1 : key down
        */
       public void sendMove(char moveDir, int status){
-            this.client.sendToServer(Protocol.updatePackage(moveDir, status, this.tank.getID(), this.tank.getX(), this.tank.getY()));
+            ClientStarter.sendToServer(Protocol.updatePackage(moveDir, status, this.tank.getID(), this.tank.getX(), this.tank.getY()));
       }
 
       /**
        * Send shooting package and client's information to server.
        */
       public void sendShoot(){
-            this.client.sendToServer(Protocol.shootPackage(this.tank.getID(), this.tank.getDir(),
+            ClientStarter.sendToServer(Protocol.shootPackage(this.tank.getID(), this.tank.getDir(),
                                     this.tank.getX() + this.tank.getWidth() / 2, this.tank.getY() + this.tank.getHeight() / 2));
       }
       

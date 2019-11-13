@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.util.HashMap;
+import com.mystudio.wtt.WhatTheTank;
 import com.mystudio.wtt.entity.tank.Tank;
 import com.mystudio.wtt.screen.Lobby;
 import com.mystudio.wtt.utils.ParseString;
@@ -24,9 +24,8 @@ public class ClientStarter extends Thread{
       private static BufferedWriter writer;
       private Socket clientSocket;
       private BufferedReader reader;
-      public static int clientID = -1;
+      private static int clientID = -1;
       public static int team = -1;
-      private HashMap<Integer, Tank> tanks;
 
       /**
        * Constructor to initialize fields and make handshaking with server.
@@ -35,7 +34,7 @@ public class ClientStarter extends Thread{
        * @throws IOException can not connect to server
        */
       public ClientStarter(String hostName)throws IOException{
-            this.tanks = new HashMap<>();
+            //this.tanks = new HashMap<>();
             this.clientSocket = new Socket(hostName, 64740);
             ClientStarter.writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
             this.reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -78,7 +77,7 @@ public class ClientStarter extends Thread{
                         this.clientRegistered(command);
                   }
                   else if(command.startsWith("Update")){
-
+                        this.updatePackage(command);
                   }
                   else if(command.startsWith("Shoot")){
 
@@ -90,6 +89,17 @@ public class ClientStarter extends Thread{
             // catch(IOException e){
             //       e.printStackTrace();
             // }
+      }
+
+      public void updatePackage(String command){
+            int ID = ParseString.parseID(command, 6);
+            char moveDir = command.charAt(7);
+            int status = ParseString.parseID(command, 8);
+            float x = ParseString.parseX(command);
+            float y = ParseString.parseY(command);
+            Tank tank = WhatTheTank.tanks.get(ID);
+            if(status == 0)tank.setPos(x, y, tank.getDir());
+            tank.key().set(moveDir, status);
       }
 
       public void setInit(String command){
@@ -121,5 +131,12 @@ public class ClientStarter extends Thread{
             int team = ParseString.parseID(command, 4);
             String name = command.substring(4, command.indexOf(":"));
             Lobby.addMember(name, team, ID);
+      }
+
+      public static int clientID()throws IOException{
+            if(ClientStarter.clientID == -1){
+                  throw new IOException("Not recieved client ID");
+            }
+            else return ClientStarter.clientID;
       }
 }

@@ -21,7 +21,8 @@ public class Tank{
       private final int TEAM;
       private final int MAX_HP;
       private final int ID;
-      private final String COLOR;
+      private final int COLOR;
+      private final String NAME;
       private Key key;
       private MoveBox moveBox;
       private boolean isDead;
@@ -37,10 +38,11 @@ public class Tank{
        * @param team Tank's team ID
        * @param ID Tank's ID
        */
-      public Tank(String color, float x, float y, int team, int ID){
+      public Tank(float x, float y, int team, int ID, String name){
+            this.NAME = name;
             this.TEAM = team;
             this.MAX_HP = 3;
-            this.COLOR = color;
+            this.COLOR = ID;
             this.hp = MAX_HP;
             this.isDead = false;
             this.visible = false;
