@@ -79,6 +79,9 @@ public class ClientStarter extends Thread{
                   else if(command.startsWith("Update")){
                         this.updatePackage(command);
                   }
+                  else if(command.startsWith("Start")){
+                        Lobby.isStart = true;
+                  }
                   else if(command.startsWith("Shoot")){
 
                   }

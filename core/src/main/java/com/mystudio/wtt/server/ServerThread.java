@@ -9,6 +9,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.HashMap;
+import java.util.Iterator;
+
 import com.mystudio.wtt.utils.ParseString;
 
 public class ServerThread extends Thread{
@@ -59,8 +61,9 @@ public class ServerThread extends Thread{
       }
 
       public void sendUpdate(int ID, char moveDir, int status, float x, float y){
-            for(int i = 0;i < clients.size();i++){
-                  BufferedWriter writer = clients.get(i).getWriter();
+            Iterator<Integer> it = clients.keySet().iterator();
+            while(it.hasNext()){
+                  BufferedWriter writer = clients.get(it.next()).getWriter();
                   try{
                         writer.write(Protocol.updatePackage(ID, moveDir, status, x, y));
                         writer.flush();
@@ -72,9 +75,11 @@ public class ServerThread extends Thread{
       }
 
       public void sendRegister(int ID, int team, String name){
-            for(int i = 0;i < clients.size();i++){
-                  if(i != ID){
-                        BufferedWriter writer = clients.get(i).getWriter();
+            Iterator<Integer> it = clients.keySet().iterator();
+            while(it.hasNext()){
+                  int key = it.next();
+                  if(key != ID){
+                        BufferedWriter writer = clients.get(key).getWriter();
                         try{
                               writer.write(Protocol.registerPackage(ID, team, name));
                               writer.flush();
@@ -90,10 +95,12 @@ public class ServerThread extends Thread{
             try{
                   writer.write(Protocol.getsPackage(clients.size() - 1));
                   writer.flush();
-                  for(int i = 0;i < clients.size();i++){
-                        if(i != ID){
-                              ClientInfo client = clients.get(i);
-                              writer.write(Protocol.getPackage(i, client.getID(), client.team(), client.name()));
+                  Iterator<Integer> it = clients.keySet().iterator();
+                  while(it.hasNext()){
+                        int key = it.next();
+                        if(key != ID){
+                              ClientInfo client = clients.get(key);
+                              writer.write(Protocol.getPackage(key, client.getID(), client.team(), client.name()));
                               writer.flush();
                         }
                   }
@@ -104,10 +111,25 @@ public class ServerThread extends Thread{
       }
 
       public void sendShoot(int ID, int dir, float x, float y){
-            for(int i = 0;i < clients.size();i++){
-                  BufferedWriter writer = clients.get(i).getWriter();
+            Iterator<Integer> it = clients.keySet().iterator();
+            while(it.hasNext()){
+                  BufferedWriter writer = clients.get(it.next()).getWriter();
                   try{
                         writer.write(Protocol.shootPackage(ID, dir, x, y));
+                        writer.flush();
+                  }
+                  catch(IOException e){
+                        e.printStackTrace();
+                  }
+            }
+      }
+
+      public void sendStart(){
+            Iterator<Integer> it = clients.keySet().iterator();
+            while(it.hasNext()){
+                  BufferedWriter writer = clients.get(it.next()).getWriter();
+                  try{
+                        writer.write(Protocol.startPackage());
                         writer.flush();
                   }
                   catch(IOException e){
@@ -174,6 +196,9 @@ public class ServerThread extends Thread{
                                     float y = ParseString.parseY(command);
                                     sendShoot(ID, dir, x, y);
                                     System.out.println("ID " + ID + " is shooting!");
+                              }
+                              else if(command.startsWith("Start")){
+                                    sendStart();
                               }
                         }
                         catch(IOException e){

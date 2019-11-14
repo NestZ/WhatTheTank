@@ -4,21 +4,30 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import com.badlogic.gdx.Gdx;
 import com.mystudio.wtt.WhatTheTank;
 import com.mystudio.wtt.client.ClientStarter;
+import com.mystudio.wtt.client.Protocol;
 import com.mystudio.wtt.entity.Map;
 import com.mystudio.wtt.entity.Map.Point;
 import com.mystudio.wtt.entity.tank.Tank;
 import org.mini2Dx.core.game.GameContainer;
+import org.mini2Dx.core.screen.GameScreen;
+import org.mini2Dx.core.screen.ScreenManager;
+import org.mini2Dx.core.screen.transition.NullTransition;
+import org.mini2Dx.ui.UiContainer;
 import org.mini2Dx.ui.element.TextButton;
 import org.mini2Dx.ui.element.Visibility;
 import org.mini2Dx.ui.event.ActionEvent;
 import org.mini2Dx.ui.listener.ActionListener;
+import org.mini2Dx.ui.style.UiTheme;
 
 public class Lobby extends Screen{
-      private Map map;
+      private float currClock = 5f;
+      private static Map map = new Map();
       public static final int ID = 4;
       public static boolean isHost;
+      public static boolean isStart = false;
       public static String myName;
       private static HashSet<Client> blueTeam = new HashSet<>();
       private static HashSet<Client> redTeam = new HashSet<>();
@@ -26,7 +35,6 @@ public class Lobby extends Screen{
       @Override
       public void initialise(GameContainer gc){
             this.assetLoad(gc);
-            this.map = new Map();
             TextButton see = new TextButton(0, 0, 400, 50);
             TextButton start = new TextButton(0, 50, 400, 50);
             see.setText("See");
@@ -56,43 +64,73 @@ public class Lobby extends Screen{
                   @Override
                   public void onActionEnd(ActionEvent event){
                         if(Lobby.isHost){
-                              HashMap<Integer, Tank> tanks = new HashMap<>();
-                              Iterator<Client> it = blueTeam.iterator();
-                              this.mapToTank(it, tanks);
-                              it = redTeam.iterator();
-                              this.mapToTank(it, tanks);
-                              WhatTheTank.tanks = tanks;
-                              WhatTheTank.initField();
-                              screenToLoad = WhatTheTank.ID;
+                              ClientStarter.sendToServer(Protocol.startPackage());
                         }
                         else{
                               System.out.println("You are client");
                         }
                   }
-
-                  private void mapToTank(Iterator<Client> it, HashMap<Integer, Tank> tanks){
-                        while(it.hasNext()){
-                              Client c = it.next();
-                              Point initPos = map.getPos(c.team);
-                              try{
-                                    tanks.put(c.ID, new Tank(initPos.getX(), initPos.getY(), c.team, ClientStarter.clientID(), c.name));
-                              }
-                              catch(IOException e){
-                                    e.printStackTrace();
-                              }
-                        }
-                  }
             });
       }
 
-      public static void addMember(String name, int team, int ID){
-            if(team == 1)blueTeam.add(new Lobby.Client(name, team, ID));
-            else if(team == 2)redTeam.add(new Lobby.Client(name, team, ID));
+      @Override
+      public void update(GameContainer gc, ScreenManager<? extends GameScreen> screenManager, float delta){
+            if(!this.assetManager.update()){
+                  return;
+            }
+            if(!UiContainer.isThemeApplied()){
+                  UiContainer.setTheme(this.assetManager.get(UiTheme.DEFAULT_THEME_FILENAME, UiTheme.class));
+            }
+            this.uiContainer.update(delta);
+            if (this.screenToLoad != 0){
+                  screenManager.enterGameScreen(this.screenToLoad, new NullTransition(), new NullTransition());
+                  this.screenToLoad = 0;
+            }
+            Gdx.input.setInputProcessor(this.uiContainer);
+            if(Lobby.isStart){
+                  if(this.currClock > 0f){
+                        this.currClock -= delta;
+                        System.out.println((int) this.currClock);
+                  }
+                  else{
+                        this.startGame();
+                        Lobby.isStart = false;
+                  }
+            }
       }
 
       @Override
       public int getId(){
             return ID;
+      }
+
+      private void startGame(){
+            HashMap<Integer, Tank> tanks = new HashMap<>();
+            Iterator<Client> it = blueTeam.iterator();
+            this.mapToTank(it, tanks);
+            it = redTeam.iterator();
+            this.mapToTank(it, tanks);
+            WhatTheTank.tanks = tanks;
+            WhatTheTank.initField();
+            screenToLoad = WhatTheTank.ID;
+      }
+
+      private void mapToTank(Iterator<Client> it, HashMap<Integer, Tank> tanks){
+            while(it.hasNext()){
+                  Client c = it.next();
+                  Point initPos = Lobby.map.getPos(c.team);
+                  try{
+                        tanks.put(c.ID, new Tank(initPos.getX(), initPos.getY(), c.team, ClientStarter.clientID(), c.name));
+                  }
+                  catch(IOException e){
+                        e.printStackTrace();
+                  }
+            }
+      }
+
+      public static void addMember(String name, int team, int ID){
+            if(team == 1)blueTeam.add(new Lobby.Client(name, team, ID));
+            else if(team == 2)redTeam.add(new Lobby.Client(name, team, ID));
       }
 
       public static class Client{
