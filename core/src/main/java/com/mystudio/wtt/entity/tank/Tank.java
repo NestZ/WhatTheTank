@@ -3,7 +3,8 @@ package com.mystudio.wtt.entity.tank;
 import com.badlogic.gdx.Gdx;
 import org.mini2Dx.core.graphics.Graphics;
 import com.badlogic.gdx.graphics.Texture;
-import com.mystudio.wtt.entity.Bullet;
+import com.mystudio.wtt.screen.Field;
+
 import org.mini2Dx.core.engine.geom.CollisionBox;
 import org.mini2Dx.core.graphics.Sprite;
 
@@ -92,7 +93,7 @@ public class Tank{
        * @param y bullet's initial y position
        */
       public void shoot(int dir, float x, float y){
-            Bullet.addBullet(this.TEAM, dir, x, y);
+            Field.addBullet(this.TEAM, dir, x, y);
       }
 
       /**

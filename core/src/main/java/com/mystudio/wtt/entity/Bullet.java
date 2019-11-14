@@ -1,6 +1,5 @@
 package com.mystudio.wtt.entity;
 
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.LinkedList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,8 +15,7 @@ public class Bullet{
       private CollisionBox collisionBox;
       private float x;
       private float y;
-      private static int bulletNum = 0;
-      public static ConcurrentHashMap<Integer, Bullet> bullets = new ConcurrentHashMap<>();
+      
       public static LinkedList<Bullet> noSprite = new LinkedList<>();
 
       public Bullet(float x, float y, int dir, int TEAM){
@@ -27,10 +25,6 @@ public class Bullet{
             this.x = x;
             this.y = y;
             Bullet.noSprite.add(this);
-      }
-
-      public static void addBullet(int TEAM, int dir, float x, float y){
-            Bullet.bullets.put(Bullet.bulletNum++, new Bullet(x, y, dir, TEAM));
       }
 
       public void setSprite(){

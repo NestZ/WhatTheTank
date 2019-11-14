@@ -83,7 +83,7 @@ public class ClientStarter extends Thread{
                         Lobby.isStart = true;
                   }
                   else if(command.startsWith("Shoot")){
-
+                        this.clientShoot(command);
                   }
             }
             // try{
@@ -92,6 +92,16 @@ public class ClientStarter extends Thread{
             // catch(IOException e){
             //       e.printStackTrace();
             // }
+      }
+
+      public void clientShoot(String command){
+            int ID = ParseString.parseID(command, 5);
+            int dir = ParseString.parseDir(command);
+            float x = ParseString.parseX(command);
+            float y = ParseString.parseY(command);
+            Tank tank = WhatTheTank.tanks.get(ID);
+            tank.shoot(dir, x, y);
+            System.out.println("Client recieve shoot ID : " + ID);
       }
 
       public void updatePackage(String command){
