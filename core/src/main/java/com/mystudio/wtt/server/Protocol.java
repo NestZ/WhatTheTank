@@ -82,4 +82,8 @@ public class Protocol{
       public static String shootPackage(int ID, int dir, float x, float y){
             return "Shoot" + Integer.toString(ID) + "x" + x + "y" + y + ":" + Integer.toString(dir) + "\n";
       }
+
+      public static String startPackage(){
+            return "Start\n";
+      }
 }
