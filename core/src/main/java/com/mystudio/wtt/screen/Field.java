@@ -4,6 +4,7 @@ import org.mini2Dx.core.graphics.Graphics;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
 import com.badlogic.gdx.Gdx;
 import com.mystudio.wtt.utils.InputHandler;
 import com.mystudio.wtt.entity.tank.CollisionHandler;
@@ -18,6 +19,8 @@ public class Field{
       private InputHandler inputHandler;
       private CollisionHandler collisionHandler;
       private HashMap<Integer, Tank> tanks;
+      private static int bulletNum = 0;
+      public static ConcurrentHashMap<Integer, Bullet> bullets = new ConcurrentHashMap<>();
 
       public Field(HashMap<Integer, Tank> tanks)throws IOException{
             this.wall = new Brick();
@@ -69,6 +72,10 @@ public class Field{
       //       });
       // }
 
+      public static void addBullet(int TEAM, int dir, float x, float y){
+            Field.bullets.put(Field.bulletNum++, new Bullet(x, y, dir, TEAM));
+      }
+
       public void update(float delta){
             Gdx.input.setInputProcessor(this.inputHandler);
             this.setTankCollision();
@@ -77,34 +84,37 @@ public class Field{
                   Bullet.noSprite.getFirst().setSprite();
                   Bullet.noSprite.removeFirst();
             }
-            for(int i = 0;i < this.tanks.size();i++){
-                  this.tanks.get(i).update(delta);
-            }
-            Iterator<Integer> it = Bullet.bullets.keySet().iterator();
+            Iterator<Integer> it = this.tanks.keySet().iterator();
             while(it.hasNext()){
-                  Bullet.bullets.get(it.next()).update(delta);
+                  this.tanks.get(it.next()).update(delta);
+            }
+            it = Field.bullets.keySet().iterator();
+            while(it.hasNext()){
+                  Field.bullets.get(it.next()).update(delta);
             }
       }
 
       public void interpolate(float alpha){
             this.wall.interpolate(alpha);
-            for(int i = 0;i < this.tanks.size();i++){
-                  this.tanks.get(i).interpolate(alpha);
-            }
-            Iterator<Integer> it = Bullet.bullets.keySet().iterator();
+            Iterator<Integer> it = this.tanks.keySet().iterator();
             while(it.hasNext()){
-                  Bullet.bullets.get(it.next()).interpolate(alpha);
+                  this.tanks.get(it.next()).interpolate(alpha);
+            }
+            it = Field.bullets.keySet().iterator();
+            while(it.hasNext()){
+                  Field.bullets.get(it.next()).interpolate(alpha);
             }
       }
 
       public void render(Graphics g){
             this.wall.render(g);
-            for(int i = 0;i < this.tanks.size();i++){
-                  this.tanks.get(i).render(g);
-            }
-            Iterator<Integer> it = Bullet.bullets.keySet().iterator();
+            Iterator<Integer> it = this.tanks.keySet().iterator();
             while(it.hasNext()){
-                  Bullet.bullets.get(it.next()).render(g);
+                  this.tanks.get(it.next()).render(g);
+            }
+            it = Field.bullets.keySet().iterator();
+            while(it.hasNext()){
+                  Field.bullets.get(it.next()).render(g);
             }
       }
 }
