@@ -8,9 +8,9 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		DesktopMini2DxConfig config = new DesktopMini2DxConfig("com.mystudio.wtt");
 		config.vSyncEnabled = true;
-		//config.height = 1080;
-		//config.width = 1920;
-		//config.fullscreen = true;
+		config.height = 1080;
+		config.width = 1920;
+		config.fullscreen = true;
 		//config.pauseWhenBackground = false;
 		//config.pauseWhenMinimized = false;
 		//config.resizable = false;

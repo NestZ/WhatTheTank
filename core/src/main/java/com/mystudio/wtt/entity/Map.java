@@ -1,10 +1,14 @@
 package com.mystudio.wtt.entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import com.mystudio.wtt.utils.Point;
 
 public class Map{
-      private ArrayList<Point> blueTeam;
-      private ArrayList<Point> redTeam;
+      private ArrayList<Point<Float>> blueTeam;
+      private ArrayList<Point<Float>> redTeam;
+      private int [][] wall = new int[60][33];
+      private HashMap<Point<Integer>, Wall> map;
       private int blueCount;
       private int redCount;
 
@@ -13,41 +17,29 @@ public class Map{
             this.redCount = 0;
             this.blueTeam = new ArrayList<>();
             this.redTeam = new ArrayList<>();
-            this.blueTeam.add(new Point(0f, 0f));
-            this.blueTeam.add(new Point(0, 500f));
-            this.redTeam.add(new Point(500f, 0f));
-            this.redTeam.add(new Point(500f, 500f));
+            this.blueTeam.add(new Point<>(100f, 100f));
+            this.blueTeam.add(new Point<>(100f, 500f));
+            this.redTeam.add(new Point<>(500f, 0f));
+            this.redTeam.add(new Point<>(500f, 500f));
+            for(int i = 0;i < 30;i++){
+                  for(int j = 0;j < 17;j++){
+                        if(i == 0 || i == 29 || j == 0 || j == 16){
+                              wall[i][j] = 1;
+                              this.map.put(new Point<Integer>(i, j), new Brick(i * 64, j * 64));
+                        }
+                        else{
+                              wall[i][j] = 0;
+                        }
+                  }
+            }
       }
 
-      public Point getPos(int team){
+      public Point<Float> getPos(int team){
             if(team == 1)return this.blueTeam.get(this.blueCount++);
             else return this.redTeam.get(this.redCount++);
       }
 
-      public class Point{
-            private float x;
-            private float y;
-
-            public Point(){
-                  this(0, 0);
-            }
-
-            private Point(float x, float y){
-                  this.x = x;
-                  this.y = y;
-            }
-
-            public void set(float x, float y){
-                  this.x = x;
-                  this.y = y;
-            }
-
-            public float getX(){
-                  return this.x;
-            }
-
-            public float getY(){
-                  return this.y;
-            }
+      public HashMap<Point<Integer>, Wall> getWallMap(){
+            return this.map;
       }
 }

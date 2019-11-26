@@ -60,6 +60,7 @@ public class Tank{
             if(this.visible){
                   this.moveBox.update(delta, this.key);
             }
+            System.out.println(this.getX() + " " + this.getY() + "\n");
       }
 
       /**
@@ -183,12 +184,28 @@ public class Tank{
             return this.moveBox.collisionBox().getRenderX();
       }
 
+      public float getMaxX(){
+            return this.moveBox.collisionBox().getMaxX();
+      }
+
+      public float getMinX(){
+            return this.moveBox.collisionBox().getMinX();
+      }
+
       /**
        * Getter for tank's y position.
        * @return tank's y direction
        */
       public float getY(){
             return this.moveBox.collisionBox().getRenderY();
+      }
+
+      public float getMaxY(){
+            return this.moveBox.collisionBox().getMaxY();
+      }
+
+      public float getMinY(){
+            return this.moveBox.collisionBox().getMinY();
       }
 
       /**

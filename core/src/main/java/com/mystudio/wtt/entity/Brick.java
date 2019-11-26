@@ -25,9 +25,9 @@ public class Brick extends Wall{
       /**
        * Constructor to set brick's sprite and collision box.
        */
-      public Brick(){
+      public Brick(float x, float y){
             this.sprite = new Sprite(new Texture(Gdx.files.internal("wall.png")));
-            this.collisionBox = new CollisionBox(250f, 250f, this.sprite.getWidth(), this.sprite.getHeight());
+            this.collisionBox = new CollisionBox(x, y, this.sprite.getWidth(), this.sprite.getHeight());
       }
 
       /**
@@ -38,12 +38,28 @@ public class Brick extends Wall{
             return this.collisionBox;
       }
 
+      public float getMaxX(){
+            return this.collisionBox.getMaxX();
+      }
+
+      public float getMinX(){
+            return this.collisionBox.getMinX();
+      }
+
+      public float getMaxY(){
+            return this.collisionBox.getMaxY();
+      }
+
+      public float getMinY(){
+            return this.collisionBox.getMinY();
+      }
+
       /**
        * Update brick's appearance 
        */
       public void update(float delta){
             this.collisionBox.preUpdate();
-            this.collisionBox.set(250f, 250f);
+            this.collisionBox.set(this.collisionBox.getRenderX(), this.collisionBox.getRenderY());
       }
 
       /**
