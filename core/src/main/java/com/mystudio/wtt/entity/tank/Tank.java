@@ -60,7 +60,6 @@ public class Tank{
             if(this.visible){
                   this.moveBox.update(delta, this.key);
             }
-            System.out.println(this.getX() + " " + this.getY() + "\n");
       }
 
       /**

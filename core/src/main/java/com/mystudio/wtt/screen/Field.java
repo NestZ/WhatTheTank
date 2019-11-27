@@ -61,8 +61,8 @@ public class Field{
             Iterator<Integer> it = this.tanks.keySet().iterator();
             while(it.hasNext()){
                   Tank t = this.tanks.get(it.next());
-                  t.update(delta);
                   this.collisionHandler.isCollide(t);
+                  t.update(delta);
             }
             it = Field.bullets.keySet().iterator();
             while(it.hasNext()){

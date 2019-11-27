@@ -21,15 +21,14 @@ public class Map{
             this.blueTeam.add(new Point<>(100f, 500f));
             this.redTeam.add(new Point<>(500f, 0f));
             this.redTeam.add(new Point<>(500f, 500f));
+            this.map = new HashMap<>();
             for(int i = 0;i < 30;i++){
                   for(int j = 0;j < 17;j++){
                         if(i == 0 || i == 29 || j == 0 || j == 16){
                               wall[i][j] = 1;
-                              this.map.put(new Point<Integer>(i, j), new Brick(i * 64, j * 64));
+                              this.map.put(new Point<Integer>(i, j), new Brick(j * 64, i * 64));
                         }
-                        else{
-                              wall[i][j] = 0;
-                        }
+                        else wall[i][j] = 0;
                   }
             }
       }

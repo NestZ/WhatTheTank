@@ -21,4 +21,20 @@ public class Point<T>{
       public T getY(){
             return this.y;
       }
+
+      @Override
+      public int hashCode(){
+            int x = (Integer)(this.x);
+            int y = (Integer)(this.y);
+            if(x < 0)x = 100;
+            if(y < 0)y = 100;
+            String s = Integer.toString(x) + Integer.toString(y);
+            return Integer.parseInt(s);
+      }
+
+      @Override
+      public boolean equals(Object o){
+            if(this.hashCode() == o.hashCode())return true;
+            return false;
+      }
 }
