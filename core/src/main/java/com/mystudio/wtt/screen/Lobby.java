@@ -119,12 +119,7 @@ public class Lobby extends Screen{
             while(it.hasNext()){
                   Client c = it.next();
                   Point<Float> initPos = this.map.getPos(c.team);
-                  try{
-                        tanks.put(c.ID, new Tank(initPos.getX(), initPos.getY(), c.team, ClientStarter.clientID(), c.name));
-                  }
-                  catch(IOException e){
-                        e.printStackTrace();
-                  }
+                  tanks.put(c.ID, new Tank(initPos.getX(), initPos.getY(), c.team, c.ID, c.name));
             }
       }
 

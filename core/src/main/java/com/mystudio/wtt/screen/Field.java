@@ -17,9 +17,9 @@ import com.mystudio.wtt.entity.Map;
 
 public class Field{
       private HashMap<Point<Integer>, Wall> wall;
+      private HashMap<Integer, Tank> tanks;
       private InputHandler inputHandler;
       private CollisionHandler collisionHandler;
-      private HashMap<Integer, Tank> tanks;
       private static int bulletNum = 0;
       public static ConcurrentHashMap<Integer, Bullet> bullets = new ConcurrentHashMap<>();
 
@@ -61,7 +61,7 @@ public class Field{
             Iterator<Integer> it = this.tanks.keySet().iterator();
             while(it.hasNext()){
                   Tank t = this.tanks.get(it.next());
-                  this.collisionHandler.isCollide(t);
+                  this.collisionHandler.isCollide(t, tanks);
                   t.update(delta);
             }
             it = Field.bullets.keySet().iterator();
