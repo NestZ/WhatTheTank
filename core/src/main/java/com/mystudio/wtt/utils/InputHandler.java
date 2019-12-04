@@ -3,7 +3,7 @@ package com.mystudio.wtt.utils;
 import com.mystudio.wtt.entity.tank.Tank;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
-import com.mystudio.wtt.client.ClientStarter;
+import com.mystudio.wtt.client.ClientThread;
 import com.mystudio.wtt.client.Protocol;
 
 /**
@@ -39,15 +39,17 @@ public class InputHandler implements InputProcessor{
        * 1 : key down
        */
       public void sendMove(char moveDir, int status){
-            ClientStarter.sendToServer(Protocol.updatePackage(moveDir, status, this.tank.getID(), this.tank.getX(), this.tank.getY()));
+            ClientThread.sendToServer(Protocol.updatePackage(moveDir, status, this.tank.getID(), this.tank.getX(), this.tank.getY()));
       }
 
       /**
        * Send shooting package and client's information to server.
        */
       public void sendShoot(){
-            ClientStarter.sendToServer(Protocol.shootPackage(this.tank.getID(), this.tank.getDir(),
-                                    this.tank.getX() + this.tank.getWidth() / 2, this.tank.getY() + this.tank.getHeight() / 2));
+            if(this.tank.shootAble()){
+                  ClientThread.sendToServer(Protocol.shootPackage(this.tank.getID(), this.tank.getDir(),
+                  this.tank.getX() + this.tank.getWidth() / 2, this.tank.getY() + this.tank.getHeight() / 2));
+            }
       }
       
       /**

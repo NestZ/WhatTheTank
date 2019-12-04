@@ -6,6 +6,7 @@ import org.mini2Dx.core.game.GameContainer;
 import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.core.screen.BasicGameScreen;
 import org.mini2Dx.core.screen.ScreenManager;
+import com.mystudio.wtt.entity.Map;
 import com.mystudio.wtt.entity.tank.Tank;
 import com.mystudio.wtt.screen.Field;
 
@@ -15,9 +16,9 @@ public class WhatTheTank extends BasicGameScreen{
   public static HashMap<Integer, Tank> tanks;
   private static Field field;
 
-  public static void initField(){
+  public static void initField(Map map){
     try{
-      field = new Field(WhatTheTank.tanks);
+      field = new Field(WhatTheTank.tanks, map);
     }
     catch(IOException e){
       e.printStackTrace();

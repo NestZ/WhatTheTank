@@ -1,21 +1,22 @@
 package com.mystudio.wtt.screen;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.mystudio.wtt.WhatTheTank;
-import com.mystudio.wtt.client.ClientStarter;
+import com.mystudio.wtt.client.ClientThread;
 import com.mystudio.wtt.client.Protocol;
 import com.mystudio.wtt.entity.Map;
-import com.mystudio.wtt.entity.Map.Point;
+import com.mystudio.wtt.utils.Point;
 import com.mystudio.wtt.entity.tank.Tank;
 import org.mini2Dx.core.game.GameContainer;
 import org.mini2Dx.core.screen.GameScreen;
 import org.mini2Dx.core.screen.ScreenManager;
 import org.mini2Dx.core.screen.transition.NullTransition;
 import org.mini2Dx.ui.UiContainer;
+import org.mini2Dx.ui.element.Label;
 import org.mini2Dx.ui.element.TextButton;
 import org.mini2Dx.ui.element.Visibility;
 import org.mini2Dx.ui.event.ActionEvent;
@@ -24,7 +25,7 @@ import org.mini2Dx.ui.style.UiTheme;
 
 public class Lobby extends Screen{
       private float currClock = 5f;
-      private static Map map = new Map();
+      private Map map = new Map();
       public static final int ID = 4;
       public static boolean isHost;
       public static boolean isStart = false;
@@ -36,13 +37,23 @@ public class Lobby extends Screen{
       public void initialise(GameContainer gc){
             this.assetLoad(gc);
             TextButton see = new TextButton(0, 0, 400, 50);
-            TextButton start = new TextButton(0, 50, 400, 50);
-            see.setText("See");
-            see.setVisibility(Visibility.VISIBLE);
+            TextButton start = new TextButton(855, 620, 200, 50);
+            Label showteama = new Label(400, 150, 200, 200);
+            Label showteamb = new Label(1400, 150, 200, 200);
+            showteama.setText("                            TEAM A      " + "\n" + " Player 1  " + "\n" + "Player 2 ");
+            showteamb.setText("                            TEAM B      " + "\n" + " Player 1  " + "\n" + "Player 2 ");
+            showteama.setColor(Color.GOLDENROD);
+            showteamb.setColor(Color.GOLDENROD);
+            showteama.setVisibility(Visibility.VISIBLE);
+            showteamb.setVisibility(Visibility.VISIBLE);
+            see.setText("See");     
+            see.setVisibility(Visibility.HIDDEN);
             start.setText("Start");
             start.setVisibility(Visibility.VISIBLE);
             this.uiContainer.add(see);
             this.uiContainer.add(start);
+            this.uiContainer.add(showteama);
+            this.uiContainer.add(showteamb);
             see.addActionListener(new ActionListener(){
                   @Override
                   public void onActionBegin(ActionEvent event){
@@ -64,7 +75,7 @@ public class Lobby extends Screen{
                   @Override
                   public void onActionEnd(ActionEvent event){
                         if(Lobby.isHost){
-                              ClientStarter.sendToServer(Protocol.startPackage());
+                              ClientThread.sendToServer(Protocol.startPackage());
                         }
                         else{
                               System.out.println("You are client");
@@ -111,20 +122,15 @@ public class Lobby extends Screen{
             it = redTeam.iterator();
             this.mapToTank(it, tanks);
             WhatTheTank.tanks = tanks;
-            WhatTheTank.initField();
+            WhatTheTank.initField(this.map);
             screenToLoad = WhatTheTank.ID;
       }
 
       private void mapToTank(Iterator<Client> it, HashMap<Integer, Tank> tanks){
             while(it.hasNext()){
                   Client c = it.next();
-                  Point initPos = Lobby.map.getPos(c.team);
-                  try{
-                        tanks.put(c.ID, new Tank(initPos.getX(), initPos.getY(), c.team, ClientStarter.clientID(), c.name));
-                  }
-                  catch(IOException e){
-                        e.printStackTrace();
-                  }
+                  Point<Float> initPos = this.map.getPos(c.team);
+                  tanks.put(c.ID, new Tank(initPos.getX(), initPos.getY(), c.team, c.ID, c.name));
             }
       }
 
