@@ -1,12 +1,11 @@
 package com.mystudio.wtt.screen;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import com.badlogic.gdx.Gdx;
 import com.mystudio.wtt.WhatTheTank;
-import com.mystudio.wtt.client.ClientStarter;
+import com.mystudio.wtt.client.ClientThread;
 import com.mystudio.wtt.client.Protocol;
 import com.mystudio.wtt.entity.Map;
 import com.mystudio.wtt.utils.Point;
@@ -64,7 +63,7 @@ public class Lobby extends Screen{
                   @Override
                   public void onActionEnd(ActionEvent event){
                         if(Lobby.isHost){
-                              ClientStarter.sendToServer(Protocol.startPackage());
+                              ClientThread.sendToServer(Protocol.startPackage());
                         }
                         else{
                               System.out.println("You are client");

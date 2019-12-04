@@ -17,7 +17,7 @@ import com.mystudio.wtt.utils.ParseString;
  * @author NestZ
  */
 
-public class ClientStarter extends Thread{
+public class ClientThread extends Thread{
       /**
        * Field to store current thread info.
        */
@@ -33,10 +33,9 @@ public class ClientStarter extends Thread{
        * 
        * @throws IOException can not connect to server
        */
-      public ClientStarter(String hostName)throws IOException{
-            //this.tanks = new HashMap<>();
+      public ClientThread(String hostName)throws IOException{
             this.clientSocket = new Socket(hostName, 64740);
-            ClientStarter.writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+            ClientThread.writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
             this.reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             System.out.println("Client Created");
       }
@@ -116,9 +115,9 @@ public class ClientStarter extends Thread{
       }
 
       public void setInit(String command){
-            ClientStarter.clientID = ParseString.parseID(command, 4);
-            ClientStarter.team = ParseString.parseID(command, 5);
-            Lobby.addMember(Lobby.myName, ClientStarter.team, ClientStarter.clientID);
+            ClientThread.clientID = ParseString.parseID(command, 4);
+            ClientThread.team = ParseString.parseID(command, 5);
+            Lobby.addMember(Lobby.myName, ClientThread.team, ClientThread.clientID);
       }
 
       public void addOtherClient(String command){
@@ -147,9 +146,9 @@ public class ClientStarter extends Thread{
       }
 
       public static int clientID()throws IOException{
-            if(ClientStarter.clientID == -1){
+            if(ClientThread.clientID == -1){
                   throw new IOException("Not recieved client ID");
             }
-            else return ClientStarter.clientID;
+            else return ClientThread.clientID;
       }
 }

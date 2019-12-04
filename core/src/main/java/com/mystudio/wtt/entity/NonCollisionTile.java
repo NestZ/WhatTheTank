@@ -1,57 +1,49 @@
 package com.mystudio.wtt.entity;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import org.mini2Dx.core.engine.geom.CollisionBox;
 import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.core.graphics.Sprite;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.Gdx;
 
-/**
- * Class to created bricks this class is extends form class Wall.
- * One of many entities in this game.
- * 
- * @see com.com.mystudio.wtt.entity.Wall
- * 
- * @author NestZ
- */
-
-public class Brick extends Wall{
-      /**
-       * Brick's sprite and collision box.
-       */
+public class NonCollisionTile implements Tiles{
       private Sprite sprite;
       private CollisionBox collisionBox;
 
-      /**
-       * Constructor to set brick's sprite and collision box.
-       */
-      public Brick(float x, float y){
-            this.sprite = new Sprite(new Texture(Gdx.files.internal("wall.png")));
+      public NonCollisionTile(float x, float y, String sprite){
+            this.sprite = new Sprite(new Texture(Gdx.files.internal(sprite)));
             this.collisionBox = new CollisionBox(x, y, this.sprite.getWidth(), this.sprite.getHeight());
       }
 
-      /**
-       * Getter for collision box
-       * @return this brick's collision box
-       */
+      @Override
       public CollisionBox collisionBox(){
             return this.collisionBox;
       }
 
       public float getMaxX(){
-            return this.collisionBox.getMaxX();
+            return 0f;
       }
 
       public float getMinX(){
-            return this.collisionBox.getMinX();
+            return 0f;
       }
 
       public float getMaxY(){
-            return this.collisionBox.getMaxY();
+            return 0f;
       }
 
       public float getMinY(){
-            return this.collisionBox.getMinY();
+            return 0f;
+      }
+
+      @Override
+      public void shot() {
+            return;
+      }
+
+      @Override
+      public boolean isVisible(){
+            return true;
       }
 
       /**

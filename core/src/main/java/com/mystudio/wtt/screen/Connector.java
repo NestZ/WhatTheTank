@@ -8,7 +8,7 @@ import org.mini2Dx.ui.element.Visibility;
 import org.mini2Dx.ui.event.ActionEvent;
 import org.mini2Dx.ui.listener.ActionListener;
 import org.mini2Dx.ui.listener.TextInputListener;
-import com.mystudio.wtt.client.ClientStarter;
+import com.mystudio.wtt.client.ClientThread;
 
 public class Connector extends Screen{
       public final static int ID = 3;
@@ -43,7 +43,7 @@ public class Connector extends Screen{
                   @Override
                   public void onActionEnd(ActionEvent event){
                         try{
-                              new ClientStarter(ip.getValue()).start();
+                              new ClientThread(ip.getValue()).start();
                               screenToLoad = Lobby.ID;
                         }
                         catch(IOException e){

@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import org.mini2Dx.core.graphics.Graphics;
 import com.badlogic.gdx.graphics.Texture;
 import com.mystudio.wtt.screen.Field;
-
+import com.mystudio.wtt.utils.Point;
 import org.mini2Dx.core.engine.geom.CollisionBox;
 import org.mini2Dx.core.graphics.Sprite;
 
@@ -20,15 +20,21 @@ public class Tank{
        * Final fields are permanently initialize by constructor.
        */
       private final int TEAM;
-      private final int MAX_HP;
       private final int ID;
-      private final int COLOR;
       private final String NAME;
+      private Point<Float> initPos;
+      private float SHOOT_DELAY;
+      private float DEAD_DELAY;
+      private float BLINK_DELAY;
+      private float currShootDelay;
+      private float currDeadDelay;
+      private float currBlinkDelay;
       private Key key;
       private MoveBox moveBox;
-      private boolean isDead;
       private boolean visible;
-      private int hp;
+      private boolean isDead;
+      private boolean isBlink;
+      private boolean shootAble;
       private Sprite sprite;
 
       /**
@@ -42,13 +48,17 @@ public class Tank{
       public Tank(float x, float y, int team, int ID, String name){
             this.NAME = name;
             this.TEAM = team;
-            this.MAX_HP = 3;
-            this.COLOR = ID;
-            this.hp = MAX_HP;
+            this.SHOOT_DELAY = 0.35f;
+            this.DEAD_DELAY = 3f;
+            this.BLINK_DELAY = 2f;
+            this.currBlinkDelay = 0f;
+            this.visible = true;
+            this.shootAble = false;
             this.isDead = false;
-            this.visible = false;
+            this.isBlink = false;
             this.ID = ID;
             this.key = new Key();
+            this.initPos = new Point<>(x, y);
             this.moveBox = new MoveBox(new CollisionBox(x, y, 0, 0), 3f);
       }
 
@@ -57,9 +67,27 @@ public class Tank{
        * @param delta delta time since last update
        */
       public void update(float delta){
-            if(this.visible){
-                  this.moveBox.update(delta, this.key);
+            if(this.currShootDelay < this.SHOOT_DELAY)this.currShootDelay += delta;
+            else this.shootAble = true;
+            if(this.isDead && this.currDeadDelay < this.DEAD_DELAY)this.currDeadDelay += delta;
+            else{
+                  if(this.isDead){
+                        this.moveBox.collisionBox().set(this.initPos.getX(), this.initPos.getY(), this.sprite.getWidth(), this.sprite.getHeight());
+                        this.isBlink = true;
+                        this.currBlinkDelay = 0f;
+                  }
+                  this.visible = true;
+                  this.isDead = false;
             }
+            if(this.isBlink && this.currBlinkDelay < this.BLINK_DELAY){
+                  int x = ((int)(currBlinkDelay * 100)) % 100;
+                  if(x > 75 || (x > 25 && x < 50))this.visible = false;
+                  else this.visible = true;
+                  this.currBlinkDelay += delta;
+            }
+            else this.isBlink = false;
+            if(!this.isDead && !this.isBlink)this.visible = true;
+            if(this.visible())this.moveBox.update(delta, this.key);
       }
 
       /**
@@ -67,9 +95,7 @@ public class Tank{
        * @param alpha delta time since last render
        */
       public void interpolate(float alpha){
-            if(this.visible){
-                  this.moveBox.interpolate(alpha);
-            }
+            this.moveBox.interpolate(alpha);
       }
 
       /**
@@ -77,9 +103,7 @@ public class Tank{
        * @param g Graphics to render at
        */
       public void render(Graphics g){
-            if(this.visible){
-                  this.moveBox.render(g);
-            }
+            this.moveBox.render(g);
       }
 
       /**
@@ -93,7 +117,22 @@ public class Tank{
        * @param y bullet's initial y position
        */
       public void shoot(int dir, float x, float y){
-            Field.addBullet(this.TEAM, dir, x, y);
+            if(this.shootAble){
+                  Field.addBullet(this.TEAM, dir, x, y, this.ID);
+                  this.currShootDelay = 0f;
+                  this.shootAble = false;
+            }
+      }
+
+      public void shot(){
+            this.visible = false;
+            this.isDead = true;
+            this.currDeadDelay = 0f;
+            this.moveBox.collisionBox().set(-1, -1, 0, 0);
+      }
+
+      public boolean visible(){
+            return this.visible;
       }
 
       /**
@@ -140,7 +179,7 @@ public class Tank{
        * Initial sprite direction is face up.
        */
       public void setSprite(){
-            this.sprite = new Sprite(new Texture(Gdx.files.internal("tank.png")));
+            this.sprite = new Sprite(new Texture(Gdx.files.internal("tank_" + this.ID + ".png")));
             this.moveBox.sprite(this.sprite);
             this.moveBox.collisionBox().setWidth(this.sprite.getWidth());
             this.moveBox.collisionBox().setHeight(this.sprite.getHeight());
@@ -231,11 +270,7 @@ public class Tank{
             return this.TEAM;
       }
 
-      /**
-       * Tank's status (dead or not).
-       * @return true if tank is dead otherwise return false
-       */
-      public boolean isDead(){
-            return this.isDead;
+      public boolean shootAble(){
+            return this.shootAble;
       }
 }

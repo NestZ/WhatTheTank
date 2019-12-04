@@ -28,7 +28,7 @@ public class Point<T>{
             int y = (Integer)(this.y);
             if(x < 0)x = 100;
             if(y < 0)y = 100;
-            String s = Integer.toString(x) + Integer.toString(y);
+            String s = Integer.toString(x * 100) + Integer.toString(y);
             return Integer.parseInt(s);
       }
 
