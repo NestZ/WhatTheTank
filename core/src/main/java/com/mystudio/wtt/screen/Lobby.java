@@ -1,16 +1,15 @@
 package com.mystudio.wtt.screen;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.mystudio.wtt.WhatTheTank;
-import com.mystudio.wtt.client.ClientStarter;
+import com.mystudio.wtt.client.ClientThread;
 import com.mystudio.wtt.client.Protocol;
 import com.mystudio.wtt.entity.Map;
-import com.mystudio.wtt.entity.Map.Point;
+import com.mystudio.wtt.utils.Point;
 import com.mystudio.wtt.entity.tank.Tank;
 import org.mini2Dx.core.game.GameContainer;
 import org.mini2Dx.core.screen.GameScreen;
@@ -26,7 +25,7 @@ import org.mini2Dx.ui.style.UiTheme;
 
 public class Lobby extends Screen{
       private float currClock = 5f;
-      private static Map map = new Map();
+      private Map map = new Map();
       public static final int ID = 4;
       public static boolean isHost;
       public static boolean isStart = false;
@@ -76,7 +75,7 @@ public class Lobby extends Screen{
                   @Override
                   public void onActionEnd(ActionEvent event){
                         if(Lobby.isHost){
-                              ClientStarter.sendToServer(Protocol.startPackage());
+                              ClientThread.sendToServer(Protocol.startPackage());
                         }
                         else{
                               System.out.println("You are client");
@@ -123,20 +122,15 @@ public class Lobby extends Screen{
             it = redTeam.iterator();
             this.mapToTank(it, tanks);
             WhatTheTank.tanks = tanks;
-            WhatTheTank.initField();
+            WhatTheTank.initField(this.map);
             screenToLoad = WhatTheTank.ID;
       }
 
       private void mapToTank(Iterator<Client> it, HashMap<Integer, Tank> tanks){
             while(it.hasNext()){
                   Client c = it.next();
-                  Point initPos = Lobby.map.getPos(c.team);
-                  try{
-                        tanks.put(c.ID, new Tank(initPos.getX(), initPos.getY(), c.team, ClientStarter.clientID(), c.name));
-                  }
-                  catch(IOException e){
-                        e.printStackTrace();
-                  }
+                  Point<Float> initPos = this.map.getPos(c.team);
+                  tanks.put(c.ID, new Tank(initPos.getX(), initPos.getY(), c.team, c.ID, c.name));
             }
       }
 

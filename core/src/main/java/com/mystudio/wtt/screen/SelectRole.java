@@ -8,9 +8,8 @@ import org.mini2Dx.ui.element.TextButton;
 import org.mini2Dx.ui.element.Visibility;
 import org.mini2Dx.ui.event.ActionEvent;
 import org.mini2Dx.ui.listener.ActionListener;
-
 import com.badlogic.gdx.graphics.Color;
-import com.mystudio.wtt.client.ClientStarter;
+import com.mystudio.wtt.client.ClientThread;
 import com.mystudio.wtt.server.ServerThread;
 
 public class SelectRole extends Screen{
@@ -45,7 +44,7 @@ public class SelectRole extends Screen{
                         try{
                               new ServerThread().start();
                               try{
-                                    new ClientStarter("127.0.0.1").start();
+                                    new ClientThread("127.0.0.1").start();
                                     Lobby.isHost = true;
                                     screenToLoad = Lobby.ID;
                               }

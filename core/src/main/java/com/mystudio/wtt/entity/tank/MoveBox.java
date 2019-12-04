@@ -21,10 +21,6 @@ public class MoveBox {
       private boolean LValid;
       private boolean UValid;
       private boolean DValid;
-      private CollisionBox R;
-      private CollisionBox L;
-      private CollisionBox U;
-      private CollisionBox D;
       private CollisionBox collisionBox;
 
       /**
@@ -33,10 +29,7 @@ public class MoveBox {
        * @param moveSpeed tank's initial move speed
        */
       public MoveBox(CollisionBox collisionBox, float moveSpeed){
-            this.R = new CollisionBox();
-            this.L = new CollisionBox();
-            this.U = new CollisionBox();
-            this.D = new CollisionBox();
+            this.direction = 1;
             this.moveSpeed = moveSpeed;
             this.collisionBox = collisionBox;
       }
@@ -205,37 +198,5 @@ public class MoveBox {
        */
       public boolean DValid(){
             return this.DValid;
-      }
-
-      /**
-       * Return tank's right collision box.
-       * @return tank's right collision box
-       */
-      public CollisionBox R(){
-            return this.R;
-      }
-      
-      /**
-       * Return tank's left collision box.
-       * @return tank's left collision box
-       */
-      public CollisionBox L(){
-            return this.L;
-      }
-
-      /**
-       * Return tank's up collision box.
-       * @return tank's up collision box
-       */
-      public CollisionBox U(){
-            return this.U;
-      }
-
-      /**
-       * Return tank's down collision box.
-       * @return tank's down collision box
-       */
-      public CollisionBox D(){
-            return this.D;
       }
 }
