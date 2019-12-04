@@ -5,58 +5,79 @@ import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.core.screen.BasicGameScreen;
 import org.mini2Dx.core.screen.GameScreen;
 import org.mini2Dx.core.screen.ScreenManager;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.graphics.Texture;
 import org.mini2Dx.core.assets.FallbackFileHandleResolver;
+
 import org.mini2Dx.core.screen.transition.NullTransition;
 import org.mini2Dx.ui.UiContainer;
 import org.mini2Dx.ui.UiThemeLoader;
+import org.mini2Dx.ui.element.AnimatedImage;
 import org.mini2Dx.ui.style.UiTheme;
+import org.mini2Dx.ui.element.Visibility;
 
-public class Screen extends BasicGameScreen{
+public class Screen extends BasicGameScreen {
+
+    protected AnimatedImage animatedImageA;
+    protected Texture[] image;
+
+    
+
+    protected float[] durations = new float[150];
     protected AssetManager assetManager;
     protected UiContainer uiContainer;
     protected int screenToLoad = 0;
 
-    public void assetLoad(GameContainer gc){
-        FileHandleResolver fileHandleResolver = new FallbackFileHandleResolver(new ClasspathFileHandleResolver(), new InternalFileHandleResolver());
+    public void assetLoad(GameContainer gc) {
+        Singleton.instance.setDurations();
+        this.image = Singleton.instance.getImage();
+        this.durations = Singleton.instance.durations;
+
+        animatedImageA = new AnimatedImage(image, durations);
+        animatedImageA.setVisibility(Visibility.VISIBLE);
+
+        FileHandleResolver fileHandleResolver = new FallbackFileHandleResolver(new ClasspathFileHandleResolver(),
+                new InternalFileHandleResolver());
         this.assetManager = new AssetManager(fileHandleResolver);
         this.assetManager.setLoader(UiTheme.class, new UiThemeLoader(fileHandleResolver));
         this.assetManager.load(UiTheme.DEFAULT_THEME_FILENAME, UiTheme.class);
         this.uiContainer = new UiContainer(gc, this.assetManager);
+        this.uiContainer.add(animatedImageA);
     }
 
     @Override
-    public void initialise(GameContainer gc){
+    public void initialise(GameContainer gc) {
 
     }
 
     @Override
-    public void update(GameContainer gc, ScreenManager<? extends GameScreen> screenManager, float delta){
-        if(!this.assetManager.update()){
+    public void update(GameContainer gc, ScreenManager<? extends GameScreen> screenManager, float delta) {
+        if (!this.assetManager.update()) {
             return;
-      }
-      if(!UiContainer.isThemeApplied()){
+        }
+        if (!UiContainer.isThemeApplied()) {
             UiContainer.setTheme(this.assetManager.get(UiTheme.DEFAULT_THEME_FILENAME, UiTheme.class));
-      }
-      this.uiContainer.update(delta);
-      if (this.screenToLoad != 0){
+        }
+        this.uiContainer.update(delta);
+        if (this.screenToLoad != 0) {
             screenManager.enterGameScreen(this.screenToLoad, new NullTransition(), new NullTransition());
             this.screenToLoad = 0;
-      }
-      Gdx.input.setInputProcessor(this.uiContainer);
+        }
+        Gdx.input.setInputProcessor(this.uiContainer);
     }
 
     @Override
-    public void interpolate(GameContainer gc, float alpha){
+    public void interpolate(GameContainer gc, float alpha) {
         this.uiContainer.interpolate(alpha);
     }
 
     @Override
-    public void render(GameContainer gc, Graphics g){
+    public void render(GameContainer gc, Graphics g) {
         this.uiContainer.render(g);
     }
 
