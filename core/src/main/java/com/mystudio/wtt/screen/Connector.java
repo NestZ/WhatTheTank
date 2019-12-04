@@ -16,14 +16,16 @@ public class Connector extends Screen{
       @Override
       public void initialise(GameContainer gc){
             this.assetLoad(gc);
-            TextBox ip = new TextBox(0, 0, 400, 50);
-            TextButton joinButton = new TextButton(0, 50, 400, 50);
+            TextBox ip = new TextBox(765, 645, 350, 50);
+            TextButton joinButton = new TextButton(861, 700, 150, 50);
             ip.setVisibility(Visibility.VISIBLE);
             ip.addTextInputListener(new TextInputListener(){
                   @Override
                   public boolean textReceived(char c){
                         if(ip.getValue().length() < 15){
+                              if((int)c == 8 || (int)c == 46 || ((int)c <= 57 && (int)c >= 48)){
                                     return true;
+                              }
                         }
                         return false;
                   }
