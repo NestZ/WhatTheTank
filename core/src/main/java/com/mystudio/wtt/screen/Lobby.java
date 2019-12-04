@@ -3,6 +3,9 @@ package com.mystudio.wtt.screen;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.mystudio.wtt.WhatTheTank;
@@ -32,28 +35,28 @@ public class Lobby extends Screen{
       public static String myName;
       private static HashSet<Client> blueTeam = new HashSet<>();
       private static HashSet<Client> redTeam = new HashSet<>();
+      private Label teamA;
+      private Label teamB;
 
       @Override
       public void initialise(GameContainer gc){
             this.assetLoad(gc);
             TextButton see = new TextButton(0, 0, 400, 50);
             TextButton start = new TextButton(855, 620, 200, 50);
-            Label showteama = new Label(400, 150, 200, 200);
-            Label showteamb = new Label(1400, 150, 200, 200);
-            showteama.setText("                            TEAM A      " + "\n" + " Player 1  " + "\n" + "Player 2 ");
-            showteamb.setText("                            TEAM B      " + "\n" + " Player 1  " + "\n" + "Player 2 ");
-            showteama.setColor(Color.GOLDENROD);
-            showteamb.setColor(Color.GOLDENROD);
-            showteama.setVisibility(Visibility.VISIBLE);
-            showteamb.setVisibility(Visibility.VISIBLE);
-            see.setText("See");     
+            teamA = new Label(400, 150, 200, 200);
+            teamB = new Label(1400, 150, 200, 200);
+            teamA.setColor(Color.GOLDENROD);
+            teamB.setColor(Color.GOLDENROD);
+            teamA.setVisibility(Visibility.VISIBLE);
+            teamB.setVisibility(Visibility.VISIBLE);
+            see.setText("See");
             see.setVisibility(Visibility.HIDDEN);
             start.setText("Start");
             start.setVisibility(Visibility.VISIBLE);
             this.uiContainer.add(see);
             this.uiContainer.add(start);
-            this.uiContainer.add(showteama);
-            this.uiContainer.add(showteamb);
+            this.uiContainer.add(teamA);
+            this.uiContainer.add(teamB);
             see.addActionListener(new ActionListener(){
                   @Override
                   public void onActionBegin(ActionEvent event){
@@ -82,10 +85,31 @@ public class Lobby extends Screen{
                         }
                   }
             });
+            InetAddress ip;
+            String hostname;
+            try{
+                ip = InetAddress.getLocalHost();
+                hostname = ip.getHostName();
+                System.out.println("Your current IP address : " + ip);
+                System.out.println("Your current Hostname : " + hostname);
+     
+            }catch(UnknownHostException e){
+                e.printStackTrace();
+            }
       }
 
       @Override
       public void update(GameContainer gc, ScreenManager<? extends GameScreen> screenManager, float delta){
+            Iterator<Client> it = blueTeam.iterator();
+            this.teamA.setText("Team A\n\n");
+            this.teamB.setText("Team B\n\n");
+            while(it.hasNext()){
+                  this.teamA.setText(this.teamA.getText() + it.next().name + "\n");
+            }
+            it = redTeam.iterator();
+            while(it.hasNext()){
+                  this.teamB.setText(this.teamB.getText() + it.next().name + "\n");
+            }
             if(!this.assetManager.update()){
                   return;
             }
@@ -130,7 +154,7 @@ public class Lobby extends Screen{
             while(it.hasNext()){
                   Client c = it.next();
                   Point<Float> initPos = this.map.getPos(c.team);
-                  tanks.put(c.ID, new Tank(initPos.getX(), initPos.getY(), c.team, c.ID, c.name));
+                  tanks.put(c.ID, new Tank(initPos.getX(), initPos.getY(), c.team, c.ID));
             }
       }
 

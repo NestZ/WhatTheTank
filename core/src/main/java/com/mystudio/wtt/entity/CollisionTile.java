@@ -4,6 +4,7 @@ import org.mini2Dx.core.engine.geom.CollisionBox;
 import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.core.graphics.Sprite;
 import com.badlogic.gdx.graphics.Texture;
+import com.mystudio.wtt.screen.Field;
 import com.badlogic.gdx.Gdx;
 
 public class CollisionTile implements Tiles{
@@ -48,6 +49,7 @@ public class CollisionTile implements Tiles{
                   if(this.HP > 2)this.HP--;
                   else if(this.HP > 1)this.sprite = new Sprite(new Texture(Gdx.files.internal("Wall_" + (--this.HP) + ".png")));
                   else{
+                        Field.s.playboomsound();
                         this.isVisible = false;
                         this.collisionBox = new CollisionBox(-1, -1, 0, 0);
                   }

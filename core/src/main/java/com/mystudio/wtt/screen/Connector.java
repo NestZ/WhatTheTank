@@ -23,9 +23,7 @@ public class Connector extends Screen{
                   @Override
                   public boolean textReceived(char c){
                         if(ip.getValue().length() < 15){
-                              if((int)c == 8 || (int)c == 46 || ((int)c <= 57 && (int)c >= 48)){
                                     return true;
-                              }
                         }
                         return false;
                   }

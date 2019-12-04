@@ -1,6 +1,7 @@
 package com.mystudio.wtt.utils;
 
 import com.mystudio.wtt.entity.tank.Tank;
+import com.mystudio.wtt.screen.Field;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
 import com.mystudio.wtt.client.ClientThread;
@@ -75,6 +76,7 @@ public class InputHandler implements InputProcessor{
                         break;
                   case Keys.SPACE :
                         this.sendShoot();
+                        Field.s.playshotsound();
                         break;
             }
             return false;

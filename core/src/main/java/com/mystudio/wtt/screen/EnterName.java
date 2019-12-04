@@ -44,8 +44,11 @@ public class EnterName extends Screen{
 
                   @Override
                   public void onActionEnd(ActionEvent event){
-                        Lobby.myName = nameBox.getValue();
-                        screenToLoad = SelectRole.ID;
+                        if(nameBox.getValue().length() > 0){
+                              Lobby.myName = nameBox.getValue();
+                              screenToLoad = SelectRole.ID;
+                        }
+                        else System.out.println("Name too short!!");
                   }
             });
       }

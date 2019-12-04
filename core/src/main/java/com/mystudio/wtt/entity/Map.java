@@ -23,10 +23,10 @@ public class Map{
             this.redCount = 0;
             this.blueTeam = new ArrayList<>();
             this.redTeam = new ArrayList<>();
-            this.blueTeam.add(new Point<>(100f, 100f));
-            this.blueTeam.add(new Point<>(100f, 500f));
-            this.redTeam.add(new Point<>(500f, 0f));
-            this.redTeam.add(new Point<>(500f, 500f));
+            this.blueTeam.add(new Point<>(90f, 256f));
+            this.blueTeam.add(new Point<>(90f, 832f));
+            this.redTeam.add(new Point<>(1788f, 256f));
+            this.redTeam.add(new Point<>(1788f, 832f));
             this.brick = new ConcurrentHashMap<>();
             this.land = new HashMap<>();
             this.floating = new HashMap<>();

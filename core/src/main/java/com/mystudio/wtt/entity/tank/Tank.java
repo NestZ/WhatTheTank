@@ -21,7 +21,6 @@ public class Tank{
        */
       private final int TEAM;
       private final int ID;
-      private final String NAME;
       private Point<Float> initPos;
       private float SHOOT_DELAY;
       private float DEAD_DELAY;
@@ -45,8 +44,7 @@ public class Tank{
        * @param team Tank's team ID
        * @param ID Tank's ID
        */
-      public Tank(float x, float y, int team, int ID, String name){
-            this.NAME = name;
+      public Tank(float x, float y, int team, int ID){
             this.TEAM = team;
             this.SHOOT_DELAY = 0.35f;
             this.DEAD_DELAY = 3f;
@@ -129,6 +127,7 @@ public class Tank{
             this.isDead = true;
             this.currDeadDelay = 0f;
             this.moveBox.collisionBox().set(-1, -1, 0, 0);
+            Field.s.playboomsound();
       }
 
       public boolean visible(){

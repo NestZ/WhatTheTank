@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.badlogic.gdx.Gdx;
 import com.mystudio.wtt.utils.InputHandler;
 import com.mystudio.wtt.utils.Point;
+import com.mystudio.wtt.utils.Sounds;
 import com.mystudio.wtt.entity.tank.CollisionHandler;
 import com.mystudio.wtt.entity.tank.Tank;
 import com.mystudio.wtt.entity.Tiles;
@@ -22,6 +23,7 @@ public class Field{
       private HashMap<Integer, Tank> tanks;
       private InputHandler inputHandler;
       private CollisionHandler collisionHandler;
+      public static Sounds s;
       private static int bulletNum = 0;
       public static ConcurrentHashMap<Integer, Bullet> bullets = new ConcurrentHashMap<>();
 
@@ -33,6 +35,8 @@ public class Field{
             this.collisionHandler = new CollisionHandler(this.brick, Field.bullets);
             this.inputHandler = new InputHandler(this.tanks.get(ClientThread.clientID()));
             this.setTankSprite();
+            Field.s = new Sounds();
+            Field.s.loopBackgroundMusic();
             //this.addExitListener();
       }
 
